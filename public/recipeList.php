@@ -42,11 +42,13 @@ function ciniki_recipes_recipeList($ciniki) {
 	if( isset($args['type']) && $args['type'] == 'cuisine' ) {
 		$strsql = "SELECT id, cuisine AS type, name "	
 			. "FROM ciniki_recipes "
+			. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 			. "ORDER BY cuisine "
 			. "";
 	} else {
 		$strsql = "SELECT id, category AS type, name "	
 			. "FROM ciniki_recipes "
+			. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 			. "ORDER BY category "
 			. "";
 	}
