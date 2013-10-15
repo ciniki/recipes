@@ -58,7 +58,7 @@ function ciniki_recipes_recipeList($ciniki) {
 		array('container'=>'types', 'fname'=>'type', 'name'=>'type',
 			'fields'=>array('id', 'name'=>'type')),
 		array('container'=>'recipes', 'fname'=>'id', 'name'=>'recipe',
-			'fields'=>array('id', 'name', 'image_id')),
+			'fields'=>array('id', 'name')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
