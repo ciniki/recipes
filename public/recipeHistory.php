@@ -47,7 +47,7 @@ function ciniki_recipes_recipeHistory($ciniki) {
 	}
 
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbGetModuleHistory');
-	return ciniki_core_dbGetModuleHistory($ciniki, 'ciniki.recipes', 'ciniki_recipe_history', $args['business_id'], 
-		'ciniki_recipes', $args['recipe_id'], $args['field']);
+	return ciniki_core_dbGetModuleHistory($ciniki, 'ciniki.recipes', 'ciniki_recipe_history', 
+		$args['business_id'], 'ciniki_recipes', $args['recipe_id'], $args['field']);
 }
 ?>

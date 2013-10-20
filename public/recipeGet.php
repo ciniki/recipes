@@ -84,34 +84,34 @@ function ciniki_recipes_recipeGet($ciniki) {
 	//
 	// Get the additional images if requested
 	//
-//	if( isset($args['images']) && $args['images'] == 'yes' ) {
-//		ciniki_core_loadMethod($ciniki, 'ciniki', 'images', 'private', 'loadCacheThumbnail');
-//		$strsql = "SELECT id, image_id, name, sequence, webflags, description "
-//			. "FROM ciniki_recipes_images "
-//			. "WHERE recipe_id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
-//			. "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
-//			. "ORDER BY sequence, date_added, name "
-//			. "";
-//		$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.recipes', array(
-//			array('container'=>'images', 'fname'=>'id', 'name'=>'image',
-//				'fields'=>array('id', 'image_id', 'name', 'sequence', 'webflags', 'description')),
-//			));
-//		if( $rc['stat'] != 'ok' ) {	
-//			return $rc;
-//		}
-//		if( isset($rc['images']) ) {
-//			$recipe['images'] = $rc['images'];
-//			foreach($recipe['images'] as $inum => $img) {
-//				if( isset($img['image']['image_id']) && $img['image']['image_id'] > 0 ) {
-//					$rc = ciniki_images_loadCacheThumbnail($ciniki, $img['image']['image_id'], 75);
-//					if( $rc['stat'] != 'ok' ) {
-//						return $rc;
-//					}
-//					$recipe['images'][$inum]['image']['image_data'] = 'data:image/jpg;base64,' . base64_encode($rc['image']);
-//				}
-//			}
-//		}
-//	}
+	if( isset($args['images']) && $args['images'] == 'yes' ) {
+		ciniki_core_loadMethod($ciniki, 'ciniki', 'images', 'private', 'loadCacheThumbnail');
+		$strsql = "SELECT id, image_id, name, sequence, webflags, description "
+			. "FROM ciniki_recipe_images "
+			. "WHERE recipe_id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
+			. "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+			. "ORDER BY sequence, date_added, name "
+			. "";
+		$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.recipes', array(
+			array('container'=>'images', 'fname'=>'id', 'name'=>'image',
+				'fields'=>array('id', 'image_id', 'name', 'sequence', 'webflags', 'description')),
+			));
+		if( $rc['stat'] != 'ok' ) {	
+			return $rc;
+		}
+		if( isset($rc['images']) ) {
+			$recipe['images'] = $rc['images'];
+			foreach($recipe['images'] as $inum => $img) {
+				if( isset($img['image']['image_id']) && $img['image']['image_id'] > 0 ) {
+					$rc = ciniki_images_loadCacheThumbnail($ciniki, $img['image']['image_id'], 75);
+					if( $rc['stat'] != 'ok' ) {
+						return $rc;
+					}
+					$recipe['images'][$inum]['image']['image_data'] = 'data:image/jpg;base64,' . base64_encode($rc['image']);
+				}
+			}
+		}
+	}
 
 	return array('stat'=>'ok', 'recipe'=>$recipe);
 }
