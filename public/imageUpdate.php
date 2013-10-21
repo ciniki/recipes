@@ -26,6 +26,7 @@ function ciniki_recipes_imageUpdate(&$ciniki) {
         'name'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Title'), 
         'permalink'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Permalink'), 
         'webflags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Website Flags'), 
+        'sequence'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Sequence'), 
         'description'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Description'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
