@@ -38,6 +38,7 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
+	$modules = $rc['modules'];
 
 	//
 	// Get the uuid of the recipes to be deleted
@@ -93,13 +94,22 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
 	}
 
 	//
+	// run ciniki.recipes.recipeDelete hooks
+	//
+	$rc = ciniki_core_methodFishHooks($ciniki, $args['business_id'], 'ciniki.recipes.recipeDelete', 
+		array('recipe_id'=>$args['recipe_id']));
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+
+	//
 	// FIXME: Delete any notes
 	//
 
 	//
 	// Remove the recipe
 	//
-	$rc = ciniki_core_objectDelete($ciniki, $args['businessa_id'], 'ciniki.recipes.recipe',
+	$rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.recipes.recipe',
 		$args['recipe_id'], $uuid);
 	if( $rc['stat'] != 'ok' ) {
 		ciniki_core_dbTransactionRollback($ciniki, 'ciniki.recipes');
