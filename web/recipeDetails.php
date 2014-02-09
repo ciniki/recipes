@@ -56,7 +56,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 		return $rc;
 	}
 	if( !isset($rc['recipes']) || count($rc['recipes']) < 1 ) {
-		return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'1506', 'msg'=>"I'm sorry, but we can't find the recipe you requested."));
+		return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'1556', 'msg'=>"I'm sorry, but we can't find the recipe you requested."));
 	}
 	$recipe = array_pop($rc['recipes']);
 

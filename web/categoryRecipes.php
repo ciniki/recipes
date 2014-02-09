@@ -52,7 +52,7 @@ function ciniki_recipes_web_categoryRecipes($ciniki, $settings, $business_id, $t
 		$strsql .= "AND ciniki_recipes.cuisine = '" . ciniki_core_dbQuote($ciniki, $type_name) . "' "
 			. "";
 	} else {
-		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1499', 'msg'=>"Unable to find recipes."));
+		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1555', 'msg'=>"Unable to find recipes."));
 	}
 	$strsql .= "ORDER BY ciniki_recipes.name ASC ";
 
