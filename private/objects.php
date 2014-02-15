@@ -31,6 +31,18 @@ function ciniki_recipes_objects($ciniki) {
 			),
 		'history_table'=>'ciniki_recipe_history',
 		);
+	$objects['tag'] = array(
+		'name'=>'Tag',
+		'sync'=>'yes',
+		'table'=>'ciniki_recipe_tags',
+			'fields'=>array(
+			'recipe_id'=>array('ref'=>'ciniki.recipes.recipe'),
+			'tag_type'=>array(),
+			'tag_name'=>array(),
+			'permalink'=>array(),
+			),
+		'history_table'=>'ciniki_recipe_history',
+		);
 	$objects['image'] = array(
 		'name'=>'Image',
 		'sync'=>'yes',

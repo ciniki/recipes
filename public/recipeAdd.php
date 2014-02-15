@@ -35,13 +35,16 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
         'ingredients'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Ingredients'), 
         'instructions'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Instructions'), 
         'notes'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Notes'), 
+		'tags'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Tags'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
     $args = $rc['args'];
 
-	$args['permalink'] = preg_replace('/ /', '-', preg_replace('/[^a-z0-9 ]/', '', strtolower($args['name'])));
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
+	$args['permalink'] = ciniki_core_makePermalink($ciniki, $args['name']);
+//	$args['permalink'] = preg_replace('/ /', '-', preg_replace('/[^a-z0-9 ]/', '', strtolower($args['name'])));
     
     //  
     // Make sure this module is activated, and
@@ -68,10 +71,57 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
 		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1355', 'msg'=>'You already have a recipe with this name, please choose another name.'));
 	}
 
+	//  
+	// Turn off autocommit
+	//  
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbTransactionStart');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbTransactionRollback');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbTransactionCommit');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQuote');
+	$rc = ciniki_core_dbTransactionStart($ciniki, 'ciniki.recipes');
+	if( $rc['stat'] != 'ok' ) { 
+		return $rc;
+	}   
+
 	//
 	// Add the recipe
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
-	return ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.recipes.recipe', $args);
+	$rc = ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.recipes.recipe', $args);
+	if( $rc['stat'] != 'ok' ) {	
+		return $rc;
+	}
+	$recipe_id = $rc['id'];
+
+	//
+	// Update the tags
+	//
+	if( isset($args['tags']) ) {
+		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
+		$rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.recipes', 'tag', $args['business_id'],
+			'ciniki_recipe_tags', 'ciniki_recipe_history',
+			'recipe_id', $recipe_id, 20, $args['tags']);
+		if( $rc['stat'] != 'ok' ) {
+			ciniki_core_dbTransactionRollback($ciniki, 'ciniki.recipes');
+			return $rc;
+		}
+	}
+
+	//
+	// Commit the database changes
+	//
+    $rc = ciniki_core_dbTransactionCommit($ciniki, 'ciniki.recipes');
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+
+	//
+	// Update the last_change date in the business modules
+	// Ignore the result, as we don't want to stop user updates if this fails.
+	//
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
+	ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'recipes');
+
+	return array('stat'=>'ok', 'id'=>$recipe_id);
 }
 ?>

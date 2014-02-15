@@ -69,7 +69,7 @@ function ciniki_recipes_main() {
 			'_image':{'label':'Image', 'aside':'yes', 'fields':{
 				'image_id':{'label':'', 'type':'image_id', 'hidelabel':'yes', 'history':'no'},
 			}},
-			'info':{'label':'Public Information', 'list':{
+			'info':{'label':'Public Information', 'aside':'yes', 'list':{
 				'name':{'label':'Title', 'type':'text'},
 				'category':{'label':'Category'},
 				'cuisine':{'label':'Cuisine'},
@@ -77,6 +77,7 @@ function ciniki_recipes_main() {
 				'prep_time':{'label':'Prep Time'},
 				'cook_time':{'label':'Cook Time'},
 				'website':{'label':'Website', 'type':'flags', 'join':'yes', 'flags':this.webFlags},
+				'tags':{'label':'Tags'},
 			}},
 			'description':{'label':'Description', 'type':'htmlcontent'},
 			'ingredients':{'label':'Ingredients', 'type':'htmlcontent'},
@@ -192,6 +193,9 @@ function ciniki_recipes_main() {
 				'cook_time':{'label':'Cook Time', 'type':'text', 'size':'small'},
 				'webflags':{'label':'Website', 'type':'flags', 'join':'yes', 'flags':this.webFlags},
 			}},
+			'_tags':{'label':'Tags', 'aside':'no', 'fields':{
+				'tags':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new tag:'},
+				}},
 			'_description':{'label':'Description', 'type':'simpleform', 'fields':{
 				'description':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
 			}},
@@ -289,7 +293,7 @@ function ciniki_recipes_main() {
 		};
 		var rsp = M.api.getJSONCb('ciniki.recipes.recipeList', 
 			{'business_id':M.curBusinessID, 'type':this.menu.listby}, function(rsp) {
-				if( rsp['stat'] != 'ok' ) {
+				if( rsp.stat != 'ok' ) {
 					M.api.err(rsp);
 					return false;
 				}
@@ -322,15 +326,9 @@ function ciniki_recipes_main() {
 
 	this.showRecipe = function(cb, rid, list) {
 		this.recipe.reset();
-		if( cb != null ) {
-			this.recipe.cb = cb;
-		}
-		if( rid != null ) {
-			this.recipe.recipe_id = rid;
-		}
-		if( list != null ) {
-			this.recipe.list = list;
-		}
+		if( cb != null ) { this.recipe.cb = cb; }
+		if( rid != null ) { this.recipe.recipe_id = rid; }
+		if( list != null ) { this.recipe.list = list; }
 
 		var rsp = M.api.getJSONCb('ciniki.recipes.recipeGet', 
 			{'business_id':M.curBusinessID, 'recipe_id':M.ciniki_recipes_main.recipe.recipe_id,
@@ -339,26 +337,30 @@ function ciniki_recipes_main() {
 					M.api.err(rsp);
 					return false;
 				}
-				M.ciniki_recipes_main.recipe.data = rsp.recipe;
+				var p = M.ciniki_recipes_main.recipe;
+				p.data = rsp.recipe;
 
+				if( rsp.recipe.tags != null && rsp.recipe.tags != '' ) {
+					p.data.tags = rsp.recipe.tags.replace(/::/g, ', ');
+				}
 				// Setup next/prev buttons
-				M.ciniki_recipes_main.recipe.prev_recipe_id = 0;
-				M.ciniki_recipes_main.recipe.next_recipe_id = 0;
-				if( M.ciniki_recipes_main.recipe.list != null ) {
-					for(i in M.ciniki_recipes_main.recipe.list) {
-						if( M.ciniki_recipes_main.recipe.next_recipe_id == -1 ) {
-							M.ciniki_recipes_main.recipe.next_recipe_id = M.ciniki_recipes_main.recipe.list[i].recipe.id;
+				p.prev_recipe_id = 0;
+				p.next_recipe_id = 0;
+				if( p.list != null ) {
+					for(i in p.list) {
+						if( p.next_recipe_id == -1 ) {
+							p.next_recipe_id = p.list[i].recipe.id;
 							break;
-						} else if( M.ciniki_recipes_main.recipe.list[i].recipe.id == M.ciniki_recipes_main.recipe.recipe_id ) {
+						} else if( p.list[i].recipe.id == p.recipe_id ) {
 							// Flag to pickup next recipe
-							M.ciniki_recipes_main.recipe.next_recipe_id = -1;
+							p.next_recipe_id = -1;
 						} else {
-							M.ciniki_recipes_main.recipe.prev_recipe_id = M.ciniki_recipes_main.recipe.list[i].recipe.id;
+							p.prev_recipe_id = p.list[i].recipe.id;
 						}
 					}
 				}
-				M.ciniki_recipes_main.recipe.refresh();
-				M.ciniki_recipes_main.recipe.show();
+				p.refresh();
+				p.show();
 			});
 	};
 
@@ -385,14 +387,21 @@ function ciniki_recipes_main() {
 		if( this.edit.recipe_id > 0 ) {
 			this.edit.sections._buttons.buttons.delete.visible = 'yes';
 			var rsp = M.api.getJSONCb('ciniki.recipes.recipeGet', 
-				{'business_id':M.curBusinessID, 'recipe_id':this.edit.recipe_id}, function(rsp) {
+				{'business_id':M.curBusinessID, 'recipe_id':this.edit.recipe_id, 'tags':'yes'}, function(rsp) {
 					if( rsp.stat != 'ok' ) {
 						M.api.err(rsp);
 						return false;
 					}
-					M.ciniki_recipes_main.edit.data = rsp.recipe;
-					M.ciniki_recipes_main.edit.refresh();
-					M.ciniki_recipes_main.edit.show(cb);
+					var p = M.ciniki_recipes_main.edit;
+					p.data = rsp.recipe;
+					p.sections._tags.fields.tags.tags = [];
+					if( rsp.tags != null ) {
+						for(i in rsp.tags) {
+							p.sections._tags.fields.tags.tags.push(rsp.tags[i].tag.name);
+						}
+					}
+					p.refresh();
+					p.show(cb);
 				});
 		} else {
 			this.edit.reset();

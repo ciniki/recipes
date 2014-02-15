@@ -35,6 +35,7 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
         'ingredients'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Ingredients'), 
         'instructions'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Instructions'), 
         'notes'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Notes'), 
+		'tags'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Tags'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
@@ -70,10 +71,57 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
 		}
 	}
 
+	//  
+	// Turn off autocommit
+	//  
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbTransactionStart');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbTransactionRollback');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbTransactionCommit');
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQuote');
+	$rc = ciniki_core_dbTransactionStart($ciniki, 'ciniki.recipes');
+	if( $rc['stat'] != 'ok' ) { 
+		return $rc;
+	}   
+
 	//
 	// Update the recipe
 	//
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectUpdate');
-	return ciniki_core_objectUpdate($ciniki, $args['business_id'], 'ciniki.recipes.recipe', $args['recipe_id'], $args);
+	$rc = ciniki_core_objectUpdate($ciniki, $args['business_id'], 'ciniki.recipes.recipe', 
+		$args['recipe_id'], $args);
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+
+	//
+	// Update the tags
+	//
+	if( isset($args['tags']) ) {
+		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
+		$rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.recipes', 'tag', $args['business_id'],
+			'ciniki_recipe_tags', 'ciniki_blog_history',
+			'recipe_id', $args['recipe_id'], 20, $args['tags']);
+		if( $rc['stat'] != 'ok' ) {
+			ciniki_core_dbTransactionRollback($ciniki, 'ciniki.recipes');
+			return $rc;
+		}
+	}
+
+	//
+	// Commit the database changes
+	//
+    $rc = ciniki_core_dbTransactionCommit($ciniki, 'ciniki.recipes');
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+
+	//
+	// Update the last_change date in the business modules
+	// Ignore the result, as we don't want to stop user updates if this fails.
+	//
+	ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
+	ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'recipes');
+
+	return array('stat'=>'ok');
 }
 ?>

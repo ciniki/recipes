@@ -23,6 +23,7 @@ function ciniki_recipes_recipeGet($ciniki) {
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
         'recipe_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Item'), 
 		'images'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Images'),
+		'tags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Tags'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
@@ -82,6 +83,30 @@ function ciniki_recipes_recipeGet($ciniki) {
 	$recipe = $rc['recipes'][0]['recipe'];
 
 	//
+	// Get the categories and tags for the post
+	//
+	$strsql = "SELECT tag_type, tag_name AS lists "
+		. "FROM ciniki_recipe_tags "
+		. "WHERE recipe_id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
+		. "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+		. "ORDER BY tag_type, tag_name "
+		. "";
+	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.recipes', array(
+		array('container'=>'tags', 'fname'=>'tag_type', 'name'=>'tags',
+			'fields'=>array('tag_type', 'lists'), 'dlists'=>array('lists'=>'::')),
+		));
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+	if( isset($rc['tags']) ) {
+		foreach($rc['tags'] as $tags) {
+			if( $tags['tags']['tag_type'] == 20 ) {
+				$recipe['tags'] = $tags['tags']['lists'];
+			}
+		}
+	}
+
+	//
 	// Get the additional images if requested
 	//
 	if( isset($args['images']) && $args['images'] == 'yes' ) {
@@ -113,6 +138,25 @@ function ciniki_recipes_recipeGet($ciniki) {
 		}
 	}
 
-	return array('stat'=>'ok', 'recipe'=>$recipe);
+	//
+	// Check if all tags should be returned
+	//
+	$tags = array();
+	if( isset($args['tags']) && $args['tags'] == 'yes' ) {
+		//
+		// Get the available tags
+		//
+		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsList');
+		$rc = ciniki_core_tagsList($ciniki, 'ciniki.recipes', $args['business_id'], 
+			'ciniki_recipe_tags', 20);
+		if( $rc['stat'] != 'ok' ) {
+			return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1596', 'msg'=>'Unable to get list of tags', 'err'=>$rc['err']));
+		}
+		if( isset($rc['tags']) ) {
+			$tags = $rc['tags'];
+		}
+	}
+
+	return array('stat'=>'ok', 'recipe'=>$recipe, 'tags'=>$tags);
 }
 ?>

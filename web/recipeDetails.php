@@ -61,6 +61,32 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 	$recipe = array_pop($rc['recipes']);
 
 	//
+	// Get the categories and tags for the recipe
+	//
+	$strsql = "SELECT id, tag_type, tag_name, permalink "
+		. "FROM ciniki_recipe_tags "
+		. "WHERE recipe_id = '" . ciniki_core_dbQuote($ciniki, $recipe['id']) . "' "
+		. "AND business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+		. "ORDER BY tag_type, tag_name "
+		. "";
+	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.recipes', array(
+		array('container'=>'types', 'fname'=>'tag_type',
+			'fields'=>array('type'=>'tag_type')),
+		array('container'=>'tags', 'fname'=>'id',
+			'fields'=>array('id', 'name'=>'tag_name', 'permalink')),
+		));
+	if( $rc['stat'] != 'ok' ) {
+		return $rc;
+	}
+	if( isset($rc['types']) ) {
+		foreach($rc['types'] as $type) {
+			if( $type['type'] == 20 ) {
+				$recipe['tags'] = $type['tags'];
+			}
+		}
+	}
+
+	//
 	// Check if any similar recipes
 	//
 	if( isset($modules['ciniki.recipes']['flags']) 
