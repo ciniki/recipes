@@ -193,7 +193,7 @@ function ciniki_recipes_main() {
 				'cook_time':{'label':'Cook Time', 'type':'text', 'size':'small'},
 				'webflags':{'label':'Website', 'type':'flags', 'join':'yes', 'flags':this.webFlags},
 			}},
-			'_tags':{'label':'Tags', 'aside':'no', 'fields':{
+			'_tags':{'label':'Tags', 'fields':{
 				'tags':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new tag:'},
 				}},
 			'_description':{'label':'Description', 'type':'simpleform', 'fields':{
