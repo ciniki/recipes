@@ -184,7 +184,7 @@ function ciniki_recipes_main() {
 			'_image':{'label':'Image', 'aside':'yes', 'fields':{
 				'image_id':{'label':'', 'type':'image_id', 'controls':'all', 'hidelabel':'yes', 'history':'no'},
 			}},
-			'info':{'label':'Public Information', 'type':'simpleform', 'fields':{
+			'info':{'label':'Public Information', 'aside':'yes', 'type':'simpleform', 'fields':{
 				'name':{'label':'Title', 'type':'text'},
 				'category':{'label':'Category', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
 				'cuisine':{'label':'Cuisine', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
@@ -193,7 +193,7 @@ function ciniki_recipes_main() {
 				'cook_time':{'label':'Cook Time', 'type':'text', 'size':'small'},
 				'webflags':{'label':'Website', 'type':'flags', 'join':'yes', 'flags':this.webFlags},
 			}},
-			'_tags':{'label':'Tags', 'fields':{
+			'_tags':{'label':'Tags', 'aside':'yes', 'fields':{
 				'tags':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new tag:'},
 				}},
 			'_description':{'label':'Description', 'type':'simpleform', 'fields':{
