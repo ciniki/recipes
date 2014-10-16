@@ -44,7 +44,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
 	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.artclub', array(
 		array('container'=>'recipes', 'fname'=>'id', 
-			'fields'=>array('id', 'name', 'permalink', 'image_id'=>'primary_image_id', 
+			'fields'=>array('id', 'name', 'permalink', 'category', 'image_id'=>'primary_image_id', 
 			'num_servings', 'prep_time', 'cook_time',
 			'description', 'ingredients', 'instructions')),
 		array('container'=>'images', 'fname'=>'image_id', 
@@ -80,7 +80,9 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 	}
 	if( isset($rc['types']) ) {
 		foreach($rc['types'] as $type) {
-			if( $type['type'] == 20 ) {
+			if( $type['type'] == 10 ) {
+				$recipe['categories'] = $type['tags'];
+			} elseif( $type['type'] == 20 ) {
 				$recipe['tags'] = $type['tags'];
 			}
 		}
