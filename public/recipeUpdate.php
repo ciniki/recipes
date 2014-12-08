@@ -99,7 +99,7 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
 	if( isset($args['tags']) ) {
 		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
 		$rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.recipes', 'tag', $args['business_id'],
-			'ciniki_recipe_tags', 'ciniki_blog_history',
+			'ciniki_recipe_tags', 'ciniki_recipe_history',
 			'recipe_id', $args['recipe_id'], 20, $args['tags']);
 		if( $rc['stat'] != 'ok' ) {
 			ciniki_core_dbTransactionRollback($ciniki, 'ciniki.recipes');
