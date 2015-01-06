@@ -125,21 +125,6 @@ function ciniki_recipes_main() {
 			}
 			return null;
 		};
-		this.recipe.thumbSrc = function(s, i, d) {
-			if( d.image.image_data != null && d.image.image_data != '' ) {
-				return d.image.image_data;
-			} else {
-				return '/ciniki-mods/core/ui/themes/default/img/noimage_75.jpg';
-			}
-		};
-		this.recipe.thumbTitle = function(s, i, d) {
-			if( d.image.name != null ) { return d.image.name; }
-			return '';
-		};
-		this.recipe.thumbID = function(s, i, d) {
-			if( d.image.id != null ) { return d.image.id; }
-			return 0;
-		};
 		this.recipe.thumbFn = function(s, i, d) {
 			return 'M.startApp(\'ciniki.recipes.images\',null,\'M.ciniki_recipes_main.showRecipe();\',\'mc\',{\'recipe_image_id\':\'' + d.image.id + '\'});';
 		};
