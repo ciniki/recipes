@@ -182,13 +182,13 @@ function ciniki_recipes_main() {
 				'tags':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new tag:'},
 				}},
 			'_description':{'label':'Description', 'type':'simpleform', 'fields':{
-				'description':{'label':'', 'type':'htmlarea', 'size':'small', 'hidelabel':'yes'},
+				'description':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
 			}},
 			'_ingredients':{'label':'Ingredients', 'type':'simpleform', 'fields':{
-				'ingredients':{'label':'', 'type':'htmlarea', 'hidelabel':'yes'},
+				'ingredients':{'label':'', 'type':'textarea', 'hidelabel':'yes'},
 			}},
 			'_instructions':{'label':'Directions', 'type':'simpleform', 'fields':{
-				'instructions':{'label':'', 'type':'htmlarea', 'hidelabel':'yes'},
+				'instructions':{'label':'', 'type':'textarea', 'hidelabel':'yes'},
 			}},
 			'_buttons':{'label':'', 'buttons':{
 				'save':{'label':'Save', 'fn':'M.ciniki_recipes_main.saveRecipe();'},
