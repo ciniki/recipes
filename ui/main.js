@@ -6,6 +6,17 @@ function ciniki_recipes_main() {
 		'1':{'name':'Hidden'},
 		'5':{'name':'Category Highlight'},
 		};
+	this.tagTypes = {
+		'10':{'name':'Meals & Courses', 'arg':'meals', 'visible':'no'},
+		'20':{'name':'Main Ingredients', 'arg':'mainingredients', 'visible':'no'},
+		'30':{'name':'Cuisines', 'arg':'cuisines', 'visible':'no'},
+		'40':{'name':'Methods', 'arg':'methods', 'visible':'no'},
+		'50':{'name':'Occasions', 'arg':'occasions', 'visible':'no'},
+		'60':{'name':'Diets', 'arg':'diets', 'visible':'no'},
+		'70':{'name':'Seasons', 'arg':'seasons', 'visible':'no'},
+		'80':{'name':'Collections', 'arg':'collections', 'visible':'no'},
+		'90':{'name':'Products', 'arg':'products', 'visible':'no'},
+		};
 	// Web flags for additional image
 	this.webFlags2 = {
 		'1':{'name':'Hidden'},
@@ -71,13 +82,21 @@ function ciniki_recipes_main() {
 			}},
 			'info':{'label':'Public Information', 'aside':'yes', 'list':{
 				'name':{'label':'Title', 'type':'text'},
-				'category':{'label':'Category'},
-				'cuisine':{'label':'Cuisine'},
+//				'category':{'label':'Category'},
+//				'cuisine':{'label':'Cuisine'},
 				'num_servings':{'label':'Servings'},
 				'prep_time':{'label':'Prep Time'},
 				'cook_time':{'label':'Cook Time'},
 				'website':{'label':'Website', 'type':'flags', 'join':'yes', 'flags':this.webFlags},
-				'tags':{'label':'Tags'},
+				'tag-10':{'label':'Meals & Courses', 'visible':'no'},
+				'tag-20':{'label':'Main Ingredients', 'visible':'no'},
+				'tag-30':{'label':'Cuisines', 'visible':'no'},
+				'tag-40':{'label':'Methods', 'visible':'no'},
+				'tag-50':{'label':'Occasions', 'visible':'no'},
+				'tag-60':{'label':'Diets', 'visible':'no'},
+				'tag-70':{'label':'Seasons', 'visible':'no'},
+				'tag-80':{'label':'Collections', 'visible':'no'},
+				'tag-90':{'label':'Products', 'visible':'no'},
 			}},
 			'description':{'label':'Description', 'type':'htmlcontent'},
 			'ingredients':{'label':'Ingredients', 'type':'htmlcontent'},
@@ -105,6 +124,12 @@ function ciniki_recipes_main() {
 			}
 		};
 		this.recipe.listValue = function(s, i, d) {
+			if( i.match(/tag-/) ) { 
+				if( this.data[i] != null ) {
+					return this.data[i].replace(/::/, ', '); 
+				}
+				return '';
+			}
 			return this.data[i];
 		};
 		this.recipe.fieldValue = function(s, i, d) {
@@ -171,15 +196,39 @@ function ciniki_recipes_main() {
 			}},
 			'info':{'label':'Public Information', 'aside':'yes', 'type':'simpleform', 'fields':{
 				'name':{'label':'Title', 'type':'text'},
-				'category':{'label':'Category', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
-				'cuisine':{'label':'Cuisine', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
+//				'category':{'label':'Category', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
+//				'cuisine':{'label':'Cuisine', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
 				'num_servings':{'label':'Servings', 'type':'text', 'size':'small'},
 				'prep_time':{'label':'Prep Time', 'type':'text', 'size':'small'},
 				'cook_time':{'label':'Cook Time', 'type':'text', 'size':'small'},
 				'webflags':{'label':'Website', 'type':'flags', 'join':'yes', 'flags':this.webFlags},
 			}},
-			'_tags':{'label':'Tags', 'aside':'yes', 'fields':{
-				'tags':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new tag:'},
+			'_10':{'label':'Meals & Courses', 'aside':'yes', 'fields':{
+				'tag-10':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new meal:'},
+				}},
+			'_20':{'label':'Main Ingredients', 'aside':'yes', 'fields':{
+				'tag-20':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new ingredient:'},
+				}},
+			'_30':{'label':'Cuisines', 'aside':'yes', 'fields':{
+				'tag-30':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new cuisine:'},
+				}},
+			'_40':{'label':'Methods', 'aside':'yes', 'fields':{
+				'tag-40':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new method:'},
+				}},
+			'_50':{'label':'Occasions', 'aside':'yes', 'fields':{
+				'tag-50':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new occasion:'},
+				}},
+			'_60':{'label':'Diets', 'aside':'yes', 'fields':{
+				'tag-60':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new diet:'},
+				}},
+			'_70':{'label':'Seasons', 'aside':'yes', 'fields':{
+				'tag-70':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new season:'},
+				}},
+			'_80':{'label':'Collections', 'aside':'yes', 'fields':{
+				'tag-80':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new collection:'},
+				}},
+			'_90':{'label':'Products', 'aside':'yes', 'fields':{
+				'tag-90':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new product:'},
 				}},
 			'_description':{'label':'Description', 'type':'simpleform', 'fields':{
 				'description':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
@@ -254,6 +303,22 @@ function ciniki_recipes_main() {
 			return false;
 		}
 
+		this.tagTypes['10'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x01)>0?'yes':'no';
+		this.tagTypes['20'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x02)>0?'yes':'no';
+		this.tagTypes['30'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x04)>0?'yes':'no';
+		this.tagTypes['40'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x08)>0?'yes':'no';
+		this.tagTypes['50'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x10)>0?'yes':'no';
+		this.tagTypes['60'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x20)>0?'yes':'no';
+		this.tagTypes['70'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x40)>0?'yes':'no';
+		this.tagTypes['80'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x80)>0?'yes':'no';
+		this.tagTypes['90'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x0100)>0?'yes':'no';
+		
+		for(i in this.tagTypes) {
+//			this.menu.formtabs.tabs[i].visible = this.tagTypes[i].visible;
+			this.recipe.sections.info.list['tag-'+i].visible = this.tagTypes[i].visible;
+			this.edit.sections['_'+i].active = this.tagTypes[i].visible;
+		}
+
 		this.showMenu(cb);
 	}
 
@@ -265,16 +330,17 @@ function ciniki_recipes_main() {
 		if( listby != null && (listby == 'category' || listby == 'cuisine' ) ) {
 			this.menu.listby = listby;
 		}
+//		this.menu.sections.tabs.selected = this.menu.listby;
 		this.menu.sections = {
 //			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':3, 'hint':'search',
 //				'noData':'No art found',
 //				'headerValues':null,
 //				'cellClasses':['thumbnail', 'multiline', 'multiline'],
 //				},
-			'tabs':{'label':'', 'type':'paneltabs', 'selected':this.menu.listby, 'tabs':{
-				'category':{'label':'Category', 'fn':'M.ciniki_recipes_main.showMenu(null,\'category\');'},
-				'cuisine':{'label':'Cuisine', 'fn':'M.ciniki_recipes_main.showMenu(null,\'cuisine\');'},
-				}},
+//			'tabs':{'label':'', 'type':'paneltabs', 'selected':this.menu.listby, 'tabs':{
+//				'category':{'label':'Category', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,\'category\');'},
+//				'cuisine':{'label':'Cuisine', 'visible':'yes', 'fn':'M.ciniki_recipes_main.showMenu(null,\'cuisine\');'},
+//				}},
 		};
 		var rsp = M.api.getJSONCb('ciniki.recipes.recipeList', 
 			{'business_id':M.curBusinessID, 'type':this.menu.listby}, function(rsp) {
@@ -369,37 +435,36 @@ function ciniki_recipes_main() {
 		if( rid != null ) {
 			this.edit.recipe_id = rid;
 		}
-		if( this.edit.recipe_id > 0 ) {
-			this.edit.sections._buttons.buttons.delete.visible = 'yes';
-			var rsp = M.api.getJSONCb('ciniki.recipes.recipeGet', 
-				{'business_id':M.curBusinessID, 'recipe_id':this.edit.recipe_id, 'tags':'yes'}, function(rsp) {
-					if( rsp.stat != 'ok' ) {
-						M.api.err(rsp);
-						return false;
-					}
-					var p = M.ciniki_recipes_main.edit;
-					p.data = rsp.recipe;
-					p.sections._tags.fields.tags.tags = [];
-					if( rsp.tags != null ) {
-						for(i in rsp.tags) {
-							p.sections._tags.fields.tags.tags.push(rsp.tags[i].tag.name);
-						}
-					}
-					p.refresh();
-					p.show(cb);
-				});
-		} else {
+		if( this.edit.recipe_id == 0 ) {
 			this.edit.reset();
 			this.edit.sections._buttons.buttons.delete.visible = 'no';
-			this.edit.data = {};
-			if( type != null && type == 'category' && type_name != null ) {
-				this.edit.data.category = type_name;
-			} else if( type != null && type == 'cuisine' && type_name != null ) {
-				this.edit.data.cuisine = type_name;
-			}
-			this.edit.refresh();
-			this.edit.show(cb);
+		} else {
+			this.edit.sections._buttons.buttons.delete.visible = 'yes';
 		}
+		M.api.getJSONCb('ciniki.recipes.recipeGet', {'business_id':M.curBusinessID, 'recipe_id':this.edit.recipe_id, 'tags':'yes'}, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_recipes_main.edit;
+			p.data = rsp.recipe;
+			for(i in M.ciniki_recipes_main.tagTypes) {
+				p.sections['_'+i].fields['tag-'+i].tags = [];
+			}
+			if( rsp.tags != null ) {
+				for(i in rsp.tags) {
+					p.sections['_'+rsp.tags[i].tag_type].fields[i].tags = rsp.tags[i].tag_names.split(/::/);
+				}
+			}
+//			p.sections._meals.fields.tags.tags = [];
+//			if( rsp.tags != null ) {
+//				for(i in rsp.tags) {
+//					p.sections._tags.fields.tags.tags.push(rsp.tags[i].tag.name);
+//				}
+//			}
+			p.refresh();
+			p.show(cb);
+		});
 	};
 
 	this.saveRecipe = function() {

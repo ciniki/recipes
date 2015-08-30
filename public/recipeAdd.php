@@ -35,7 +35,15 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
         'ingredients'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Ingredients'), 
         'instructions'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Instructions'), 
         'notes'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Notes'), 
-		'tags'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Tags'),
+		'tag-10'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Meals'),
+		'tag-20'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Ingredients'),
+		'tag-30'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Cuisines'),
+		'tag-40'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Methods'),
+		'tag-50'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Occasions'),
+		'tag-60'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Diets'),
+		'tag-70'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Seasons'),
+		'tag-80'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Collections'),
+		'tag-90'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Products'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
@@ -44,7 +52,6 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
 
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
 	$args['permalink'] = ciniki_core_makePermalink($ciniki, $args['name']);
-//	$args['permalink'] = preg_replace('/ /', '-', preg_replace('/[^a-z0-9 ]/', '', strtolower($args['name'])));
     
     //  
     // Make sure this module is activated, and
@@ -96,14 +103,27 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
 	//
 	// Update the tags
 	//
-	if( isset($args['tags']) ) {
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
-		$rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.recipes', 'tag', $args['business_id'],
-			'ciniki_recipe_tags', 'ciniki_recipe_history',
-			'recipe_id', $recipe_id, 20, $args['tags']);
-		if( $rc['stat'] != 'ok' ) {
-			ciniki_core_dbTransactionRollback($ciniki, 'ciniki.recipes');
-			return $rc;
+	$tag_types = array(
+		'10'=>'meals',
+		'20'=>'mainingredients',
+		'30'=>'cuisines',
+		'40'=>'methods',
+		'50'=>'occasions',
+		'60'=>'diets',
+		'70'=>'seasons',
+		'80'=>'collections',
+		'90'=>'products',
+		);
+	foreach($tag_types as $tag_type => $arg_name) {
+		if( isset($args['tag-' . $tag_type]) ) {
+			ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
+			$rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.recipes', 'tag', $args['business_id'],
+				'ciniki_recipe_tags', 'ciniki_recipe_history',
+				'recipe_id', $recipe_id, $tag_type, $args['tag-' . $tag_type]);
+			if( $rc['stat'] != 'ok' ) {
+				ciniki_core_dbTransactionRollback($ciniki, 'ciniki.recipes');
+				return $rc;
+			}
 		}
 	}
 

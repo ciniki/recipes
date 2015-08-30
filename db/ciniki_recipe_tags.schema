@@ -15,8 +15,14 @@
 #					these tags to be used for multiple purposes.
 #	
 #					0 - unknown
-#					10 - Category 
-#					20 - Tag 
+#					10 - Meals & Courses (Breakfast, Lunch, Brunch, Baking, Desserts, Appetizer, Sides, Soups, Salads, Drinks)
+#					20 - Main Ingredient (Kidney beans, Beets, Orza, Quinoa, etc) 
+#					30 - Cuisine (Mexican, American, Fusion)
+#					40 - Method (BBQ, Slow Cooker, Pressure Cooker, Stovetop, Baked)
+#					50 - Occasion (Halloween, Thanksgiving, Birthday, Hanukkah, Christmas)
+#					60 - Diet (Low Fat, Gluten Free, Vegan, Vegetarian, Diabetes)
+#					70 - Season (Spring, Summer, Fall, Winter)
+#					80 - Collections (Vegetables, Beef, etc)
 #
 # tag_name:			The name of the tag, list or category.
 #
