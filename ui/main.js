@@ -27,10 +27,96 @@ function ciniki_recipes_main() {
 		//
 		this.menu = new M.panel('Recipes',
 			'ciniki_recipes_main', 'menu',
-			'mc', 'medium', 'sectioned', 'ciniki.recipes.main.menu');
+			'mc', 'medium narrowaside', 'sectioned', 'ciniki.recipes.main.menu');
 		this.menu.data = {};
-		this.menu.sections = {};	// Sections are set in showPieces function
-		this.menu.listby = 'category';
+		this.menu.formtab = '10';
+		this.menu.tag_name = '';
+		this.menu.formtabs = {'label':'', 'tabs':{
+			'10':{'label':'Meals', 'visible':'yes', 'fn':'M.ciniki_recipes_main.showMenu(null,10,\'\');'},
+			'20':{'label':'Ingredients', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,20,\'\');'},
+			'30':{'label':'Cuisines', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,30,\'\');'},
+			'40':{'label':'Methods', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,40,\'\');'},
+			'50':{'label':'Occasions', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,50,\'\');'},
+			'60':{'label':'Diets', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,60,\'\');'},
+			'70':{'label':'Seasons', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,70,\'\');'},
+			'80':{'label':'Collections', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,80,\'\');'},
+			'90':{'label':'Products', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,90,\'\');'},
+			}},
+		this.menu.forms = {};
+		this.menu.forms['10'] = {
+			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
+			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Recipe',
+				'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\', 0);',
+				},
+			};
+		this.menu.forms['20'] = {
+			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
+			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Recipe',
+				'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\', 0);',
+				},
+			};
+		this.menu.forms['30'] = {
+			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
+			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Recipe',
+				'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\', 0);',
+				},
+			};
+		this.menu.forms['40'] = {
+			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
+			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Recipe',
+				'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\', 0);',
+				},
+			};
+		this.menu.forms['50'] = {
+			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
+			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Recipe',
+				'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\', 0);',
+				},
+			};
+		this.menu.forms['60'] = {
+			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
+			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Recipe',
+				'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\', 0);',
+				},
+			};
+		this.menu.forms['70'] = {
+			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
+			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Recipe',
+				'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\', 0);',
+				},
+			};
+		this.menu.forms['80'] = {
+			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
+			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Recipe',
+				'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\', 0);',
+				},
+			};
+		this.menu.forms['90'] = {
+			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
+			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Recipe',
+				'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\', 0);',
+				},
+			};
+		this.menu.sections = this.menu.forms['10'];	
+//		this.menu.listby = 'category';
 //		this.menu.liveSearchCb = function(s, i, v) {
 //			if( v != '' ) {
 //				M.api.getJSONBgCb('ciniki.recipes.searchQuick', {'business_id':M.curBusinessID, 'start_needle':v, 'limit':'15'},
@@ -52,12 +138,18 @@ function ciniki_recipes_main() {
 //			M.ciniki_recipes_main.searchArtCatalog('M.ciniki_recipes_main.showMenu();', search_str);
 //		};
 		this.menu.cellValue = function(s, i, j, d) {
-			if( j == 0 ) { 
+			if( s == 'tags' ) {
+				return d.tag.tag_name + ' <span class="count">' + d.tag.num_recipes + '</span>';
+			} 
+			else if( s == 'recipes' ) {
 				return '<span class="maintext">' + d.recipe.name + '</span>';
 			}
 		};
 		this.menu.rowFn = function(s, i, d) {
-			return 'M.ciniki_recipes_main.showRecipe(\'M.ciniki_recipes_main.showMenu();\', \'' + d.recipe.id + '\',M.ciniki_recipes_main.menu.data[unescape(\'' + escape(s) + '\')]);'; 
+			switch(s) {
+				case 'tags': return 'M.ciniki_recipes_main.showMenu(null,null,\'' + escape(d.tag.tag_name) + '\');';
+				case 'recipes': return 'M.ciniki_recipes_main.showRecipe(\'M.ciniki_recipes_main.showMenu();\', \'' + d.recipe.id + '\',M.ciniki_recipes_main.menu.data[unescape(\'' + escape(s) + '\')]);'; 
+			}
 		};
 		this.menu.sectionData = function(s) { 
 			return this.data[s];
@@ -312,17 +404,44 @@ function ciniki_recipes_main() {
 		this.tagTypes['70'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x40)>0?'yes':'no';
 		this.tagTypes['80'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x80)>0?'yes':'no';
 		this.tagTypes['90'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x0100)>0?'yes':'no';
-		
+	
+		this.menu.formtab = null;
 		for(i in this.tagTypes) {
-//			this.menu.formtabs.tabs[i].visible = this.tagTypes[i].visible;
+			this.menu.formtabs.tabs[i].visible = this.tagTypes[i].visible;
 			this.recipe.sections.info.list['tag-'+i].visible = this.tagTypes[i].visible;
 			this.edit.sections['_'+i].active = this.tagTypes[i].visible;
+			if( this.menu.formtab == null && this.tagTypes[i].visible == 'yes' ) {
+				this.menu.formtab = i;
+			}
 		}
 
+		this.menu.tag_name = null;
 		this.showMenu(cb);
 	}
 
-	this.showMenu = function(cb, listby, type, sec) {
+	this.showMenu = function(cb, tag_type, tag_name) {
+		if( tag_type != null ) { this.menu.formtab = tag_type; }
+		if( tag_name != null ) { this.menu.tag_name = unescape(tag_name); }
+		var args = {'business_id':M.curBusinessID};
+		if( this.menu.formtab != null ) { args.tag_type = this.menu.formtab; }
+		if( this.menu.tag_name != null ) { args.tag_name = this.menu.tag_name; }
+		M.api.getJSONCb('ciniki.recipes.recipeList', args, function(rsp) {
+			if( rsp.stat != 'ok' ) {
+				M.api.err(rsp);
+				return false;
+			}
+			var p = M.ciniki_recipes_main.menu;
+			p.data = rsp;
+			p.refresh();
+			p.show();
+		});
+	};
+
+	this.showTag = function(tag_name) {
+		
+	};
+
+	this.OLDshowMenu = function(cb, listby, type, sec) {
 		//
 		// If there is not many 
 		//
