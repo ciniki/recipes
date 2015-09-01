@@ -41,7 +41,7 @@ function ciniki_recipes_web_recipes($ciniki, $settings, $business_id, $args) {
 		. "'yes' AS is_details, "
 		. "UNIX_TIMESTAMP(ciniki_recipes.last_updated) AS last_updated "
 		. "";
-	if( isset($args['category']) && $args['category'] != '' ) {
+/*	if( isset($args['category']) && $args['category'] != '' ) {
 		$strsql .= "FROM ciniki_recipes "
 			. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
 			. "AND ciniki_recipes.category = '" . ciniki_core_dbQuote($ciniki, $args['category']) . "' "
@@ -53,15 +53,26 @@ function ciniki_recipes_web_recipes($ciniki, $settings, $business_id, $args) {
 			. "AND ciniki_recipes.cuisine = '" . ciniki_core_dbQuote($ciniki, $args['cuisine']) . "' "
 			. "AND (ciniki_recipes.webflags&0x01) = 0 "
 			. "";
-	} elseif( isset($args['tag']) && $args['tag'] != '' ) {
+	} else */
+if( isset($args['tag_type']) && $args['tag_type'] != '' && isset($args['tag_permalink']) && $args['tag_permalink'] != '' ) {
 		$strsql .= ", ciniki_recipe_tags.tag_name "
 			. "FROM ciniki_recipe_tags, ciniki_recipes "
 			. "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
-			. "AND ciniki_recipe_tags.permalink = '" . ciniki_core_dbQuote($ciniki, $args['tag']) . "' "
+			. "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
+			. "AND ciniki_recipe_tags.permalink = '" . ciniki_core_dbQuote($ciniki, $args['tag_permalink']) . "' "
 			. "AND ciniki_recipe_tags.recipe_id = ciniki_recipes.id "
 			. "AND ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
 			. "AND (ciniki_recipes.webflags&0x01) = 0 "
 			. "";
+//	} elseif( isset($args['tag']) && $args['tag'] != '' ) {
+//		$strsql .= ", ciniki_recipe_tags.tag_name "
+//			. "FROM ciniki_recipe_tags, ciniki_recipes "
+//			. "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+//			. "AND ciniki_recipe_tags.permalink = '" . ciniki_core_dbQuote($ciniki, $args['tag']) . "' "
+//			. "AND ciniki_recipe_tags.recipe_id = ciniki_recipes.id "
+//			. "AND ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+//			. "AND (ciniki_recipes.webflags&0x01) = 0 "
+//			. "";
 	} else {
 		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1555', 'msg'=>"Unable to find recipes."));
 	}

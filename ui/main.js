@@ -218,7 +218,7 @@ function ciniki_recipes_main() {
 		this.recipe.listValue = function(s, i, d) {
 			if( i.match(/tag-/) ) { 
 				if( this.data[i] != null ) {
-					return this.data[i].replace(/::/, ', '); 
+					return this.data[i].replace(/::/g, ', '); 
 				}
 				return '';
 			}
@@ -424,7 +424,10 @@ function ciniki_recipes_main() {
 		if( tag_name != null ) { this.menu.tag_name = unescape(tag_name); }
 		var args = {'business_id':M.curBusinessID};
 		if( this.menu.formtab != null ) { args.tag_type = this.menu.formtab; }
-		if( this.menu.tag_name != null ) { args.tag_name = this.menu.tag_name; }
+		if( this.menu.tag_name != null ) { 
+			this.menu.forms[this.menu.formtab].recipes.label = this.menu.tag_name;
+			args.tag_name = this.menu.tag_name; 
+		}
 		M.api.getJSONCb('ciniki.recipes.recipeList', args, function(rsp) {
 			if( rsp.stat != 'ok' ) {
 				M.api.err(rsp);
@@ -435,63 +438,6 @@ function ciniki_recipes_main() {
 			p.refresh();
 			p.show();
 		});
-	};
-
-	this.showTag = function(tag_name) {
-		
-	};
-
-	this.OLDshowMenu = function(cb, listby, type, sec) {
-		//
-		// If there is not many 
-		//
-		this.menu.data = {};
-		if( listby != null && (listby == 'category' || listby == 'cuisine' ) ) {
-			this.menu.listby = listby;
-		}
-//		this.menu.sections.tabs.selected = this.menu.listby;
-		this.menu.sections = {
-//			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':3, 'hint':'search',
-//				'noData':'No art found',
-//				'headerValues':null,
-//				'cellClasses':['thumbnail', 'multiline', 'multiline'],
-//				},
-//			'tabs':{'label':'', 'type':'paneltabs', 'selected':this.menu.listby, 'tabs':{
-//				'category':{'label':'Category', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,\'category\');'},
-//				'cuisine':{'label':'Cuisine', 'visible':'yes', 'fn':'M.ciniki_recipes_main.showMenu(null,\'cuisine\');'},
-//				}},
-		};
-		var rsp = M.api.getJSONCb('ciniki.recipes.recipeList', 
-			{'business_id':M.curBusinessID, 'type':this.menu.listby}, function(rsp) {
-				if( rsp.stat != 'ok' ) {
-					M.api.err(rsp);
-					return false;
-				}
-				M.ciniki_recipes_main.menu.data = {};
-				// 
-				// Setup the menu to display the categories
-				//
-				M.ciniki_recipes_main.menu.data = {};
-				var i = 0;
-				for(i in rsp.types) {
-					M.ciniki_recipes_main.menu.data[rsp.types[i].type.name + ' '] = rsp.types[i].type.recipes;
-					M.ciniki_recipes_main.menu.sections[rsp.types[i].type.name + ' '] = {'label':rsp.types[i].type.name,
-						'num_cols':1, 'type':'simplegrid', 'headerValues':null,
-						'cellClasses':['multiline'],
-						'noData':'No FAQs found',
-						'addTxt':'Add',
-						'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\',0,M.ciniki_recipes_main.menu.listby,\'' + rsp.types[i].type.name + '\');',
-					};
-				}
-				if( rsp.types.length == 0 ) {
-					M.ciniki_recipes_main.menu.data['_nodata'] = [{'label':'No recipes found.  '},];
-					M.ciniki_recipes_main.menu.sections['_nodata'] = {'label':' ', 'type':'simplelist', 'list':{
-						'nodata':{'label':'No recipes found'}}};
-				}
-				
-				M.ciniki_recipes_main.menu.refresh();
-				M.ciniki_recipes_main.menu.show(cb);
-			});
 	};
 
 	this.showRecipe = function(cb, rid, list) {
@@ -575,12 +521,6 @@ function ciniki_recipes_main() {
 					p.sections['_'+rsp.tags[i].tag_type].fields[i].tags = rsp.tags[i].tag_names.split(/::/);
 				}
 			}
-//			p.sections._meals.fields.tags.tags = [];
-//			if( rsp.tags != null ) {
-//				for(i in rsp.tags) {
-//					p.sections._tags.fields.tags.tags.push(rsp.tags[i].tag.name);
-//				}
-//			}
 			p.refresh();
 			p.show(cb);
 		});

@@ -9,7 +9,7 @@
 // Returns
 // -------
 //
-function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $permalink) {
+function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $permalink, $tag_permalink) {
 
 	$modules = array();
 	if( isset($ciniki['business']['modules']) ) {
@@ -125,6 +125,27 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 		}
 	}
 
-	return array('stat'=>'ok', 'recipe'=>$recipe);
+	$rsp = array('stat'=>'ok', 'recipe'=>$recipe);
+
+	//
+	// Check if we need to get the tag_name
+	//
+	if( $tag_permalink != '' ) {
+		$strsql = "SELECT DISTINCT tag_name "
+			. "FROM ciniki_recipe_tags "
+			. "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+			. "AND ciniki_recipe_tags.recipe_id = '" . ciniki_core_dbQuote($ciniki, $recipe['id']) . "' "
+			. "LIMIT 1 "
+			. "";
+		$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.recipes', 'tag');
+		if( $rc['stat'] != 'ok' ) {
+			return $rc;
+		}
+		if( isset($rc['tag']) ) {
+			$rsp['tag_name'] = $rc['tag']['tag_name'];
+		}
+	}
+
+	return $rsp;
 }
 ?>

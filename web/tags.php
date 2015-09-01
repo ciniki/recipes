@@ -20,20 +20,24 @@
 //
 function ciniki_recipes_web_tags($ciniki, $settings, $business_id, $tag_type) {
 
-	$strsql = "SELECT tag_name, COUNT(ciniki_recipe_tags.recipe_id) AS num_recipes, ciniki_recipes.image_id "
+	$strsql = "SELECT ciniki_recipe_tags.tag_name, "
+		. "ciniki_recipe_tags.permalink, "
+		. "COUNT(ciniki_recipe_tags.recipe_id) AS num_tags, "
+		. "ciniki_recipes.image_id "
 		. "FROM ciniki_recipe_tags, ciniki_recipes "
 		. "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
-		. "AND ciniki_recipe_tags.tag_tag_type = '" . ciniki_core_dbQuote($ciniki, $tag_type) . "' "
+		. "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $tag_type) . "' "
 		. "AND ciniki_recipe_tags.recipe_id = ciniki_recipes.id "
 		. "AND ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
 		. "AND (ciniki_recipes.webflags&0x01) = 0 "
-		. "ORDER BY ciniki_recipe_tags.tag_name, ciniki_recipes.date_added "
+		. "GROUP BY ciniki_recipe_tags.tag_name "
+		. "ORDER BY ciniki_recipe_tags.tag_name, ciniki_recipes.date_added DESC "
 		. "";
 	
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.recipes', array(
-		array('container'=>'tags', 'fname'=>'tag_name', 'name'=>'tag',
-			'fields'=>array('tag_name', 'num_recipes', 'image_id')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
+	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.blog', array(
+		array('container'=>'tags', 'fname'=>'permalink', 
+			'fields'=>array('name'=>'tag_name', 'permalink', 'num_tags', 'image_id')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
@@ -41,7 +45,7 @@ function ciniki_recipes_web_tags($ciniki, $settings, $business_id, $tag_type) {
 	if( !isset($rc['tags']) ) {
 		return array('stat'=>'ok');
 	}
-	$categories = $rc['tags'];
+	$tags = $rc['tags'];
 
 /*
 	//
