@@ -37,6 +37,7 @@ function ciniki_recipes_web_recipes($ciniki, $settings, $business_id, $args) {
 		. "ciniki_recipes.num_servings, "
 		. "ciniki_recipes.prep_time, "
 		. "ciniki_recipes.cook_time, "
+		. "ciniki_recipes.synopsis, "
 		. "ciniki_recipes.description, "
 		. "'yes' AS is_details, "
 		. "UNIX_TIMESTAMP(ciniki_recipes.last_updated) AS last_updated "

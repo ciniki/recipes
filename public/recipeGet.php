@@ -61,6 +61,7 @@ function ciniki_recipes_recipeGet($ciniki) {
 			'webflags'=>'0',
 			'prep_time'=>'',
 			'cook_time'=>'',
+			'synopsis'=>'',
 			'description'=>'',
 			'ingredients'=>'',
 			'instructions'=>'',
@@ -75,6 +76,7 @@ function ciniki_recipes_recipeGet($ciniki) {
 			. "ciniki_recipes.webflags, "
 			. "ciniki_recipes.prep_time, "
 			. "ciniki_recipes.cook_time, "
+			. "ciniki_recipes.synopsis, "
 			. "ciniki_recipes.description, "
 			. "ciniki_recipes.ingredients, "
 			. "ciniki_recipes.instructions, "
@@ -88,7 +90,7 @@ function ciniki_recipes_recipeGet($ciniki) {
 			array('container'=>'recipes', 'fname'=>'id', 'name'=>'recipe',
 				'fields'=>array('id', 'name', 'permalink', 'image_id', 'category', 'cuisine', 
 					'num_servings', 'webflags', 'prep_time', 'cook_time', 
-					'description', 'ingredients', 'instructions', 'website'),
+					'synopsis', 'description', 'ingredients', 'instructions', 'website'),
 				),
 			));
 		if( $rc['stat'] != 'ok' ) {

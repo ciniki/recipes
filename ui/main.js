@@ -190,6 +190,7 @@ function ciniki_recipes_main() {
 				'tag-80':{'label':'Collections', 'visible':'no'},
 				'tag-90':{'label':'Products', 'visible':'no'},
 			}},
+			'synopsis':{'label':'Synopsis', 'type':'htmlcontent'},
 			'description':{'label':'Description', 'type':'htmlcontent'},
 			'ingredients':{'label':'Ingredients', 'type':'htmlcontent'},
 			'instructions':{'label':'Directions', 'type':'htmlcontent'},
@@ -204,7 +205,7 @@ function ciniki_recipes_main() {
 			}},
 			};
 		this.recipe.sectionData = function(s) {
-			if( s == 'description' || s == 'ingredients' || s == 'instructions' ) { 
+			if( s == 'synopsis' || s == 'description' || s == 'ingredients' || s == 'instructions' ) { 
 				return this.data[s].replace(/\n/g, '<br/>'); 
 			}
 			if( s == 'info' ) { return this.sections[s].list; }
@@ -322,8 +323,11 @@ function ciniki_recipes_main() {
 			'_90':{'label':'Products', 'aside':'yes', 'fields':{
 				'tag-90':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new product:'},
 				}},
+			'_synopsis':{'label':'Synopsis', 'type':'simpleform', 'fields':{
+				'synopsis':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
+			}},
 			'_description':{'label':'Description', 'type':'simpleform', 'fields':{
-				'description':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
+				'description':{'label':'', 'type':'textarea', 'size':'medium', 'hidelabel':'yes'},
 			}},
 			'_ingredients':{'label':'Ingredients', 'type':'simpleform', 'fields':{
 				'ingredients':{'label':'', 'type':'textarea', 'hidelabel':'yes'},

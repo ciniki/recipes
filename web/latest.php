@@ -37,6 +37,7 @@ function ciniki_recipes_web_latest($ciniki, $settings, $business_id, $limit) {
 		. "ciniki_recipes.num_servings, "
 		. "ciniki_recipes.prep_time, "
 		. "ciniki_recipes.cook_time, "
+		. "ciniki_recipes.synopsis, "
 		. "ciniki_recipes.description, "
 		. "'yes' AS is_details, "
 		. "IF(ciniki_images.last_updated > ciniki_recipes.last_updated, UNIX_TIMESTAMP(ciniki_images.last_updated), UNIX_TIMESTAMP(ciniki_recipes.last_updated)) AS last_updated "

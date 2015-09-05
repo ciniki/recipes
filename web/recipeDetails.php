@@ -91,7 +91,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 	//
 	// Check if any similar recipes
 	//
-	if( isset($modules['ciniki.recipes']['flags']) 
+/*	if( isset($modules['ciniki.recipes']['flags']) 
 		&& ($modules['ciniki.recipes']['flags']&0x01) > 0
 		) {
 		$strsql = "SELECT ciniki_recipes.id, "
@@ -123,7 +123,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 		if( $rc['stat'] == 'ok' && isset($rc['recipes']) ) {
 			$recipe['similar'] = $rc['recipes'];
 		}
-	}
+	} */
 
 	$rsp = array('stat'=>'ok', 'recipe'=>$recipe);
 

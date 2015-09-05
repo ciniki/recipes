@@ -29,7 +29,8 @@
 # prep_time:		The time it takes to prepare the ingredients.
 # cook_time:		The time it takes to cook.
 #
-# description:		The description of the recipe.  Used in listings, etc.
+# synopsis:			The synopsis of the recipe.  Used in listings, etc.
+# description:		The description of the recipe.  Used in full page.
 # ingredients:		The list of ingredients to be used
 # instructions:		The steps to follow to make this recipe.
 #
@@ -50,6 +51,7 @@ create table ciniki_recipes (
 	webflags tinyint unsigned not null,
 	prep_time varchar(200) not null,
 	cook_time varchar(200) not null,
+	synopsis varchar(6000) not null,
 	description varchar(6000) not null,
 	ingredients varchar(6000) not null,
 	instructions varchar(6000) not null,
@@ -58,4 +60,4 @@ create table ciniki_recipes (
 	primary key (id),
 	unique index (permalink, business_id),
 	index business_uuid (business_id, uuid, last_updated)
-) ENGINE='InnoDB', COMMENT='v1.01';
+) ENGINE='InnoDB', COMMENT='v1.02';
