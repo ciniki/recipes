@@ -64,13 +64,53 @@ function ciniki_recipes_recipeList($ciniki) {
 		if( isset($rc['tags']) ) {
 			$tags = $rc['tags'];
 		}
+
+		//
+		// Get untaged recipes
+		//
+		$strsql = "SELECT ciniki_recipe_tags.tag_name, "
+			. "COUNT(ciniki_recipes.id) AS num_recipes "
+			. "FROM ciniki_recipes "
+			. "LEFT JOIN ciniki_recipe_tags ON ("
+				. "ciniki_recipes.id = ciniki_recipe_tags.recipe_id "
+				. "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
+				. "AND ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+				. ") "
+			. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+			. "AND ISNULL(tag_name) "
+			. "";
+		$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.recipes', 'untagged');
+		if( $rc['stat'] != 'ok' ) {
+			return $rc;
+		}
+		if( isset($rc['untagged']) && $rc['untagged']['num_recipes'] > 0 ) {
+			$tags[] = array('tag'=>array('permalink'=>'--', 
+				'tag_name'=>'Unknown', 
+				'num_recipes'=>$rc['untagged']['num_recipes'],
+				));
+		}
+
 	}
+
+
 
 	//
 	// Get the list of recipes requested
 	//
 	$recipes = array();
-	if( isset($args['tag_type']) && $args['tag_type'] != '' && isset($args['tag_name']) && $args['tag_name'] != '' ) {
+	if( isset($args['tag_type']) && $args['tag_type'] != '' && isset($args['tag_name']) && $args['tag_name'] == 'Unknown' ) {
+		$strsql = "SELECT ciniki_recipes.id, ciniki_recipes.name "	
+			. "FROM ciniki_recipes "
+			. "LEFT JOIN ciniki_recipe_tags ON ("
+				. "ciniki_recipes.id = ciniki_recipe_tags.recipe_id "
+				. "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
+				. "AND ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+				. ") "
+			. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+			. "AND ISNULL(ciniki_recipe_tags.tag_name) "
+			. "ORDER BY name "
+			. "";
+	} elseif( isset($args['tag_type']) && $args['tag_type'] != '' && isset($args['tag_name']) && $args['tag_name'] != '' ) {
 		$strsql = "SELECT ciniki_recipes.id, ciniki_recipes.name "	
 			. "FROM ciniki_recipe_tags, ciniki_recipes "
 			. "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "

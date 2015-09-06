@@ -440,7 +440,7 @@ function ciniki_recipes_main() {
 			var p = M.ciniki_recipes_main.menu;
 			p.data = rsp;
 			p.refresh();
-			p.show();
+			p.show(cb);
 		});
 	};
 
