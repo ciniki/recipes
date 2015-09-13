@@ -23,6 +23,8 @@
 #					60 - Diet (Low Fat, Gluten Free, Vegan, Vegetarian, Diabetes)
 #					70 - Season (Spring, Summer, Fall, Winter)
 #					80 - Collections (Vegetables, Beef, etc)
+#					90 - Products
+#					100 - Contributors
 #
 # tag_name:			The name of the tag, list or category.
 #

@@ -16,6 +16,7 @@ function ciniki_recipes_main() {
 		'70':{'name':'Seasons', 'arg':'seasons', 'visible':'no'},
 		'80':{'name':'Collections', 'arg':'collections', 'visible':'no'},
 		'90':{'name':'Products', 'arg':'products', 'visible':'no'},
+		'100':{'name':'Contributors', 'arg':'contributors', 'visible':'no'},
 		};
 	// Web flags for additional image
 	this.webFlags2 = {
@@ -41,6 +42,7 @@ function ciniki_recipes_main() {
 			'70':{'label':'Seasons', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,70,\'\');'},
 			'80':{'label':'Collections', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,80,\'\');'},
 			'90':{'label':'Products', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,90,\'\');'},
+			'100':{'label':'Contributors', 'visible':'no', 'fn':'M.ciniki_recipes_main.showMenu(null,100,\'\');'},
 			}},
 		this.menu.forms = {};
 		this.menu.forms['10'] = {
@@ -108,6 +110,14 @@ function ciniki_recipes_main() {
 				},
 			};
 		this.menu.forms['90'] = {
+			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
+			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
+				'addTxt':'Add Recipe',
+				'addFn':'M.ciniki_recipes_main.showEdit(\'M.ciniki_recipes_main.showMenu();\', 0);',
+				},
+			};
+		this.menu.forms['100'] = {
 			'tags':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1},
 			'search':{'label':'', 'type':'livesearchgrid', 'livesearchcols':1, 'hint':'recipe name', 'noData':'No recipes found'},
 			'recipes':{'label':'Latest Recipes', 'type':'simplegrid', 'num_cols':1,
@@ -189,6 +199,7 @@ function ciniki_recipes_main() {
 				'tag-70':{'label':'Seasons', 'visible':'no'},
 				'tag-80':{'label':'Collections', 'visible':'no'},
 				'tag-90':{'label':'Products', 'visible':'no'},
+				'tag-100':{'label':'Contributors', 'visible':'no'},
 			}},
 			'synopsis':{'label':'Synopsis', 'type':'htmlcontent'},
 			'description':{'label':'Description', 'type':'htmlcontent'},
@@ -323,6 +334,9 @@ function ciniki_recipes_main() {
 			'_90':{'label':'Products', 'aside':'yes', 'fields':{
 				'tag-90':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new product:'},
 				}},
+			'_100':{'label':'Contributors', 'aside':'yes', 'fields':{
+				'tag-100':{'label':'', 'hidelabel':'yes', 'type':'tags', 'tags':[], 'hint':'Enter a new contributor:'},
+				}},
 			'_synopsis':{'label':'Synopsis', 'type':'simpleform', 'fields':{
 				'synopsis':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
 			}},
@@ -408,6 +422,7 @@ function ciniki_recipes_main() {
 		this.tagTypes['70'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x40)>0?'yes':'no';
 		this.tagTypes['80'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x80)>0?'yes':'no';
 		this.tagTypes['90'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x0100)>0?'yes':'no';
+		this.tagTypes['100'].visible = (M.curBusiness.modules['ciniki.recipes'].flags&0x0200)>0?'yes':'no';
 	
 		this.menu.formtab = null;
 		for(i in this.tagTypes) {

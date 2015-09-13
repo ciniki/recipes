@@ -45,6 +45,7 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
 		'tag-70'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Seasons'),
 		'tag-80'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Collections'),
 		'tag-90'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Products'),
+		'tag-100'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Contributors'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
@@ -114,6 +115,7 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
 		'70'=>'seasons',
 		'80'=>'collections',
 		'90'=>'products',
+		'100'=>'contributors',
 		);
 	foreach($tag_types as $tag_type => $arg_name) {
 		if( isset($args['tag-' . $tag_type]) ) {

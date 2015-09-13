@@ -24,7 +24,7 @@ function ciniki_recipes_flags($ciniki, $modules) {
 		array('flag'=>array('bit'=>'8', 'name'=>'Collections')),
 		// 0x0100
 		array('flag'=>array('bit'=>'9', 'name'=>'Products')),
-//		array('flag'=>array('bit'=>'10', 'name'=>'Main Ingredients')),
+		array('flag'=>array('bit'=>'10', 'name'=>'Contributors')),
 //		array('flag'=>array('bit'=>'11', 'name'=>'Cuisine')),
 //		array('flag'=>array('bit'=>'12', 'name'=>'Methods')),
 		// 0x1000
