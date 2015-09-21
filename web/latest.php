@@ -36,6 +36,7 @@ function ciniki_recipes_web_latest($ciniki, $settings, $business_id, $limit) {
 		. "ciniki_recipes.image_id, "
 		. "ciniki_recipes.num_servings, "
 		. "ciniki_recipes.prep_time, "
+		. "ciniki_recipes.roast_time, "
 		. "ciniki_recipes.cook_time, "
 		. "ciniki_recipes.synopsis, "
 		. "ciniki_recipes.description, "

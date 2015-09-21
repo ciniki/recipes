@@ -1,0 +1,5 @@
+#
+# Add new column roast_time
+#
+ALTER TABLE ciniki_recipes ADD COLUMN roast_time varchar(200) not null AFTER prep_time;
+ALTER TABLE ciniki_recipes COMMENT='v1.03';

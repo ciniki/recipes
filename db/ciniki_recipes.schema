@@ -27,6 +27,7 @@
 #
 # num_servings:		The number of servings from this recipe.
 # prep_time:		The time it takes to prepare the ingredients.
+# roast_time:		The time it takes to roast item(s).
 # cook_time:		The time it takes to cook.
 #
 # synopsis:			The synopsis of the recipe.  Used in listings, etc.
@@ -50,6 +51,7 @@ create table ciniki_recipes (
 	num_servings int not null,
 	webflags tinyint unsigned not null,
 	prep_time varchar(200) not null,
+	roast_time varchar(200) not null,
 	cook_time varchar(200) not null,
 	synopsis varchar(6000) not null,
 	description varchar(6000) not null,
@@ -60,4 +62,4 @@ create table ciniki_recipes (
 	primary key (id),
 	unique index (permalink, business_id),
 	index business_uuid (business_id, uuid, last_updated)
-) ENGINE='InnoDB', COMMENT='v1.02';
+) ENGINE='InnoDB', COMMENT='v1.03';

@@ -130,6 +130,10 @@ function ciniki_recipes_templates_single($ciniki, $business_id, $categories, $ar
 				$recipe['prep_time'] .= ' minutes';
 				$ingredients_height += 6;
 			}
+			if( $recipe['roast_time'] != '' && $recipe['roast_time'] > 0 ) {
+				$recipe['roast_time'] .= ' minutes';
+				$ingredients_height += 6;
+			}
 			if( $recipe['cook_time'] != '' && $recipe['cook_time'] > 0 ) {
 				$recipe['cook_time'] .= ' minutes';
 				$ingredients_height += 6;
@@ -172,6 +176,10 @@ function ciniki_recipes_templates_single($ciniki, $business_id, $categories, $ar
 			}
 			if( $recipe['prep_time'] != '' && $recipe['prep_time'] > 0 ) {
 				$this->Cell(0, 6, 'Prep Time: ' . $recipe['prep_time'], 0, 1, 'L');
+				$this->Ln(0);
+			}
+			if( $recipe['roast_time'] != '' && $recipe['roast_time'] > 0 ) {
+				$this->Cell(0, 6, 'Roast Time: ' . $recipe['roast_time'], 0, 1, 'L');
 				$this->Ln(0);
 			}
 			if( $recipe['cook_time'] != '' && $recipe['cook_time'] > 0 ) {

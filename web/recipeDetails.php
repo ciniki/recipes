@@ -23,6 +23,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 		. "ciniki_recipes.cuisine, "
 		. "ciniki_recipes.num_servings, "
 		. "ciniki_recipes.prep_time, "
+		. "ciniki_recipes.roast_time, "
 		. "ciniki_recipes.cook_time, "
 		. "ciniki_recipes.description, "
 		. "ciniki_recipes.ingredients, "
@@ -45,7 +46,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.artclub', array(
 		array('container'=>'recipes', 'fname'=>'id', 
 			'fields'=>array('id', 'name', 'permalink', 'category', 'image_id'=>'primary_image_id', 
-			'num_servings', 'prep_time', 'cook_time',
+			'num_servings', 'prep_time', 'roast_time', 'cook_time',
 			'description', 'ingredients', 'instructions')),
 		array('container'=>'images', 'fname'=>'image_id', 
 			'fields'=>array('image_id', 'title'=>'image_name', 'permalink'=>'image_permalink',

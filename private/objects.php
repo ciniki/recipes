@@ -24,6 +24,7 @@ function ciniki_recipes_objects($ciniki) {
 			'num_servings'=>array(),
 			'webflags'=>array(),
 			'prep_time'=>array(),
+			'roast_time'=>array(),
 			'cook_time'=>array(),
 			'synopsis'=>array(),
 			'description'=>array(),

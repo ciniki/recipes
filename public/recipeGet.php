@@ -60,6 +60,7 @@ function ciniki_recipes_recipeGet($ciniki) {
 			'num_servings'=>'',
 			'webflags'=>'0',
 			'prep_time'=>'',
+			'roast_time'=>'',
 			'cook_time'=>'',
 			'synopsis'=>'',
 			'description'=>'',
@@ -75,6 +76,7 @@ function ciniki_recipes_recipeGet($ciniki) {
 			. "ciniki_recipes.num_servings, "
 			. "ciniki_recipes.webflags, "
 			. "ciniki_recipes.prep_time, "
+			. "ciniki_recipes.roast_time, "
 			. "ciniki_recipes.cook_time, "
 			. "ciniki_recipes.synopsis, "
 			. "ciniki_recipes.description, "
@@ -89,7 +91,7 @@ function ciniki_recipes_recipeGet($ciniki) {
 		$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.recipes', array(
 			array('container'=>'recipes', 'fname'=>'id', 'name'=>'recipe',
 				'fields'=>array('id', 'name', 'permalink', 'image_id', 'category', 'cuisine', 
-					'num_servings', 'webflags', 'prep_time', 'cook_time', 
+					'num_servings', 'webflags', 'prep_time', 'roast_time', 'cook_time', 
 					'synopsis', 'description', 'ingredients', 'instructions', 'website'),
 				),
 			));
@@ -120,23 +122,6 @@ function ciniki_recipes_recipeGet($ciniki) {
 		if( isset($rc['tags']) ) {
 			foreach($rc['tags'] as $arg => $tag) {
 				$recipe[$arg] = $tag['lists'];
-/*				if( $tags['tags']['tag_type'] == 10 ) {
-					$recipe['meals'] = $tags['tags']['lists'];
-				} elseif( $tags['tags']['tag_type'] == 20 ) {
-					$recipe['mainingredients'] = $tags['tags']['lists'];
-				} elseif( $tags['tags']['tag_type'] == 30 ) {
-					$recipe['cuisines'] = $tags['tags']['lists'];
-				} elseif( $tags['tags']['tag_type'] == 40 ) {
-					$recipe['methods'] = $tags['tags']['lists'];
-				} elseif( $tags['tags']['tag_type'] == 50 ) {
-					$recipe['occasions'] = $tags['tags']['lists'];
-				} elseif( $tags['tags']['tag_type'] == 60 ) {
-					$recipe['diets'] = $tags['tags']['lists'];
-				} elseif( $tags['tags']['tag_type'] == 70 ) {
-					$recipe['seasons'] = $tags['tags']['lists'];
-				} elseif( $tags['tags']['tag_type'] == 80 ) {
-					$recipe['collections'] = $tags['tags']['lists'];
-				} */
 			}
 		}
 
@@ -196,16 +181,6 @@ function ciniki_recipes_recipeGet($ciniki) {
 		if( isset($rc['tags']) ) {
 			$tags = $rc['tags'];
 		}
-/*
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsList');
-		$rc = ciniki_core_tagsList($ciniki, 'ciniki.recipes', $args['business_id'], 
-			'ciniki_recipe_tags', 20);
-		if( $rc['stat'] != 'ok' ) {
-			return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1596', 'msg'=>'Unable to get list of tags', 'err'=>$rc['err']));
-		}
-		if( isset($rc['tags']) ) {
-			$tags = $rc['tags'];
-		} */
 	}
 
 	return array('stat'=>'ok', 'recipe'=>$recipe, 'tags'=>$tags);

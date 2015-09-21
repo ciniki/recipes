@@ -30,6 +30,7 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
         'num_servings'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Number of Servings'), 
         'webflags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Web Flags'), 
         'prep_time'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Prep Time'), 
+        'roast_time'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Roast Time'), 
         'cook_time'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Cook Time'), 
         'synopsis'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Synopsis'), 
         'description'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Description'), 
