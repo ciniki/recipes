@@ -41,6 +41,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 			. ") "
 		. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
 		. "AND ciniki_recipes.permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
+		. "ORDER BY ciniki_recipe_images.sequence, ciniki_recipe_images.date_added, ciniki_recipe_images.name "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
 	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.artclub', array(

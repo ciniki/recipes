@@ -47,7 +47,8 @@ function ciniki_recipes_imageUpdate(&$ciniki) {
 	//
 	// Get the existing image details
 	//
-	$strsql = "SELECT uuid, image_id FROM ciniki_recipe_images "
+	$strsql = "SELECT uuid, recipe_id, image_id "
+		. "FROM ciniki_recipe_images "
 		. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 		. "AND id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_image_id']) . "' "
 		. "";
@@ -71,7 +72,7 @@ function ciniki_recipes_imageUpdate(&$ciniki) {
 		//
 		$strsql = "SELECT id, name, permalink FROM ciniki_recipe_images "
 			. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
-			. "AND recipe_id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
+			. "AND recipe_id = '" . ciniki_core_dbQuote($ciniki, $item['recipe_id']) . "' "
 			. "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
 			. "AND id <> '" . ciniki_core_dbQuote($ciniki, $args['recipe_image_id']) . "' "
 			. "";
