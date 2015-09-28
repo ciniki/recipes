@@ -19,7 +19,7 @@
 function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $args) {
 	
 	if( !isset($ciniki['business']['modules']['ciniki.recipes']) ) {
-		return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2570', 'msg'=>"I'm sorry, the file you requested does not exist."));
+		return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2570', 'msg'=>"I'm sorry, the page you requested does not exist."));
 	}
 	$page = array(
 		'title'=>$args['page_title'],
@@ -53,10 +53,8 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 		&& preg_match("/^(.*)\.pdf$/", $args['uri_split'][2], $matches)
 		) {
 		ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'web', 'downloadPDF');
-		$rc = ciniki_recipes_web_downloadPDF($ciniki, $settings, $business_id, 
-			$matches[1], array('layout'=>$args['uri_split'][1]));
+		$rc = ciniki_recipes_web_downloadPDF($ciniki, $settings, $business_id, $matches[1], array('layout'=>$args['uri_split'][1]));
 		if( $rc['stat'] == 'ok' ) {
-			$page['file'] = $rc['file'];
 			return array('stat'=>'ok', 'download'=>$rc['file']);
 		}
 		
@@ -100,7 +98,6 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 		$tag_type = $tag_types[$type_permalink]['tag_type'];
 		$tag_title = $tag_types[$type_permalink]['name'];
 		$display = 'type';
-		$ciniki['response']['head']['og']['url'] .= '/' . $type_permalink;
 		$base_url .= '/' . $type_permalink;
 
 		//
@@ -113,7 +110,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 			$display = 'recipe';
 			$ciniki['response']['head']['links'][] = array('rel'=>'canonical', 
 				'href'=>$ciniki['request']['domain_base_url'] . '/recipes/' . $recipe_permalink);
-			$ciniki['response']['head']['og']['url'] .= '/' . $tag_permalink . '/' . $recipe_permalink;
+			$ciniki['response']['head']['og']['url'] .= '/' . $recipe_permalink;
 			$base_url .= '/' . $tag_permalink . '/' . $recipe_permalink;
 			
 			//
@@ -135,8 +132,14 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 			$tag_title = $tag_types[$args['uri_split'][0]]['name'];
 			$tag_permalink = $args['uri_split']['1'];
 			$display = 'tag';
-			$ciniki['response']['head']['og']['url'] .= '/' . $tag_permalink;
+			$ciniki['response']['head']['og']['url'] .= '/' . $type_permalink . '/' . $tag_permalink;
 			$base_url .= '/' . $tag_permalink;
+		}
+		//
+		// Setup type og 
+		//
+		else {
+			$ciniki['response']['head']['og']['url'] .= '/' . $type_permalink;
 		}
 	}
 
@@ -267,49 +270,24 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 			if( !isset($recipe['images']) || count($recipe['images']) < 1 ) {
 				$page['blocks'][] = array('type'=>'message', 'content'=>"I'm sorry, but we can't seem to find the image you requested.");
 			} else {
-				$first = NULL;
-				$last = NULL;
-				$img = NULL;
-				$next = NULL;
-				$prev = NULL;
-				foreach($recipe['images'] as $iid => $image) {
-					if( $first == NULL ) {
-						$first = $image;
-					}
-					if( $image['permalink'] == $image_permalink ) {
-						$img = $image;
-					} elseif( $next == NULL && $img != NULL ) {
-						$next = $image;
-					} elseif( $img == NULL ) {
-						$prev = $image;
-					}
-					$last = $image;
+				ciniki_core_loadMethod($ciniki, 'ciniki', 'web', 'private', 'galleryFindNextPrev');
+				$rc = ciniki_web_galleryFindNextPrev($ciniki, $recipe['images'], $image_permalink);
+				if( $rc['stat'] != 'ok' ) {
+					return $rc;
 				}
-
-				if( count($recipe['images']) == 1 ) {
-					$prev = NULL;
-					$next = NULL;
-				} elseif( $prev == NULL ) {
-					// The requested image was the first in the list, set previous to last
-					$prev = $last;
-				} elseif( $next == NULL ) {
-					// The requested image was the last in the list, set previous to last
-					$next = $first;
-				}
-
-				if( $img == NULL ) {
+				if( $rc['img'] == NULL ) {
 					$page['blocks'][] = array('type'=>'message', 'content'=>"I'm sorry, but we can't seem to find the image you requested.");
 				} else {
-					$page['breadcrumbs'][] = array('name'=>$img['title'], 'url'=>$base_url . '/gallery/' . $image_permalink);
-					if( $img['title'] != '' ) {
-						$page['title'] .= ' - ' . $img['title'];
+					$page['breadcrumbs'][] = array('name'=>$rc['img']['title'], 'url'=>$base_url . '/gallery/' . $image_permalink);
+					if( $rc['img']['title'] != '' ) {
+						$page['title'] .= ' - ' . $rc['img']['title'];
 					}
-					$block = array('type'=>'image', 'primary'=>'yes', 'image'=>$img);
-					if( $prev != null ) {
-						$block['prev'] = array('url'=>$base_url . '/gallery/' . $prev['permalink'], 'image_id'=>$prev['image_id']);
+					$block = array('type'=>'image', 'primary'=>'yes', 'image'=>$rc['img']);
+					if( $rc['prev'] != null ) {
+						$block['prev'] = array('url'=>$base_url . '/gallery/' . $rc['prev']['permalink'], 'image_id'=>$rc['prev']['image_id']);
 					}
-					if( $next != null ) {
-						$block['next'] = array('url'=>$base_url . '/gallery/' . $next['permalink'], 'image_id'=>$next['image_id']);
+					if( $rc['next'] != null ) {
+						$block['next'] = array('url'=>$base_url . '/gallery/' . $rc['next']['permalink'], 'image_id'=>$rc['next']['image_id']);
 					}
 					$page['blocks'][] = $block;
 				}
