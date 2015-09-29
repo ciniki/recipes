@@ -3,8 +3,8 @@
 //
 function ciniki_recipes_main() {
 	this.webFlags = {
-		'1':{'name':'Hidden'},
-		'5':{'name':'Category Highlight'},
+		'1':{'name':'Visible'},
+//		'5':{'name':'Category Highlight'},
 		};
 	this.tagTypes = {
 		'10':{'name':'Meals & Courses', 'arg':'meals', 'visible':'no'},
@@ -20,7 +20,7 @@ function ciniki_recipes_main() {
 		};
 	// Web flags for additional image
 	this.webFlags2 = {
-		'1':{'name':'Hidden'},
+		'1':{'name':'Visible'},
 		};
 	this.init = function() {
 		//
@@ -184,8 +184,6 @@ function ciniki_recipes_main() {
 			}},
 			'info':{'label':'Public Information', 'aside':'yes', 'list':{
 				'name':{'label':'Title', 'type':'text'},
-//				'category':{'label':'Category'},
-//				'cuisine':{'label':'Cuisine'},
 				'num_servings':{'label':'Servings'},
 				'prep_time':{'label':'Prep Time'},
 				'roast_time':{'label':'Roast Time'},
@@ -301,8 +299,6 @@ function ciniki_recipes_main() {
 			}},
 			'info':{'label':'Public Information', 'aside':'yes', 'type':'simpleform', 'fields':{
 				'name':{'label':'Title', 'type':'text'},
-//				'category':{'label':'Category', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
-//				'cuisine':{'label':'Cuisine', 'type':'text', 'livesearch':'yes', 'livesearchempty':'yes'},
 				'num_servings':{'label':'Servings', 'type':'text', 'size':'small'},
 				'prep_time':{'label':'Prep Time', 'type':'text', 'size':'small'},
 				'roast_time':{'label':'Roast Time', 'type':'text', 'size':'small'},
@@ -362,7 +358,7 @@ function ciniki_recipes_main() {
 		this.edit.sectionData = function(s) {
 			return this.data[s];
 		};
-		this.edit.liveSearchCb = function(s, i, value) {
+/*		this.edit.liveSearchCb = function(s, i, value) {
 			if( i == 'category' || i == 'cuisine' ) {
 				var rsp = M.api.getJSONBgCb('ciniki.recipes.searchField', {'business_id':M.curBusinessID, 'field':i, 'start_needle':value, 'limit':15},
 					function(rsp) {
@@ -383,7 +379,7 @@ function ciniki_recipes_main() {
 		this.edit.updateField = function(s, fid, result) {
 			M.gE(this.panelUID + '_' + fid).value = unescape(result);
 			this.removeLiveSearch(s, fid);
-		};
+		}; */
 		this.edit.fieldHistoryArgs = function(s, i) {
 			return {'method':'ciniki.recipes.recipeHistory', 'args':{'business_id':M.curBusinessID, 
 				'recipe_id':this.recipe_id, 'field':i}};

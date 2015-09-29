@@ -21,7 +21,6 @@ function ciniki_recipes_recipeList($ciniki) {
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
 		'tag_type'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Type'),
 		'tag_name'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Tag'),
-//		'type'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'category', 'name'=>'Type'),
         'limit'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Limit'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 

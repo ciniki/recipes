@@ -20,7 +20,7 @@
 #					displayed on the website.  This could be used for 
 #					artists to submit porfolios and determine which ones show up.
 #
-#					0x01 - Private (do not show on website, can be used to share marketing material with organizers)
+#					0x01 - Visible ( show on website)
 #
 # sequence:			The order of the image when displayed on the website. **future**
 #
@@ -47,4 +47,4 @@ create table ciniki_recipe_images (
 	primary key (id),
 	index (recipe_id, name),
 	index (business_id, uuid, last_updated)
-) ENGINE='InnoDB', COMMENT='v1.01';
+) ENGINE='InnoDB', COMMENT='v1.02';

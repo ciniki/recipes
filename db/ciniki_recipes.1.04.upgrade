@@ -1,0 +1,7 @@
+#
+# Change flags from Hidden to Visible, flip the bits
+#
+ALTER TABLE ciniki_recipes DROP COLUMN category;
+ALTER TABLE ciniki_recipes DROP COLUMN cuisine;
+UPDATE ciniki_recipes SET webflags = (webflags^(1<<0));
+ALTER TABLE ciniki_recipes COMMENT='v1.04';

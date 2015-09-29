@@ -19,8 +19,6 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 	$strsql = "SELECT ciniki_recipes.id, "
 		. "ciniki_recipes.name, "
 		. "ciniki_recipes.permalink, "
-		. "ciniki_recipes.category, "
-		. "ciniki_recipes.cuisine, "
 		. "ciniki_recipes.num_servings, "
 		. "ciniki_recipes.prep_time, "
 		. "ciniki_recipes.roast_time, "
@@ -37,16 +35,17 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
 		. "FROM ciniki_recipes "
 		. "LEFT JOIN ciniki_recipe_images ON ("
 			. "ciniki_recipes.id = ciniki_recipe_images.recipe_id "
-			. "AND (ciniki_recipe_images.webflags&0x01) = 0 "
+			. "AND (ciniki_recipe_images.webflags&0x01) = 1 "
 			. ") "
 		. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
 		. "AND ciniki_recipes.permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
+		. "AND (ciniki_recipes.webflags&0x01) = 1 "
 		. "ORDER BY ciniki_recipe_images.sequence, ciniki_recipe_images.date_added, ciniki_recipe_images.name "
 		. "";
 	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
 	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.artclub', array(
 		array('container'=>'recipes', 'fname'=>'id', 
-			'fields'=>array('id', 'name', 'permalink', 'category', 'image_id'=>'primary_image_id', 
+			'fields'=>array('id', 'name', 'permalink', 'image_id'=>'primary_image_id', 
 			'num_servings', 'prep_time', 'roast_time', 'cook_time',
 			'description', 'ingredients', 'instructions')),
 		array('container'=>'images', 'fname'=>'image_id', 

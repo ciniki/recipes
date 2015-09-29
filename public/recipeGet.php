@@ -58,7 +58,7 @@ function ciniki_recipes_recipeGet($ciniki) {
 			'name'=>'',
 			'permalink'=>'',
 			'num_servings'=>'',
-			'webflags'=>'0',
+			'webflags'=>'1',
 			'prep_time'=>'',
 			'roast_time'=>'',
 			'cook_time'=>'',
@@ -71,8 +71,6 @@ function ciniki_recipes_recipeGet($ciniki) {
 	} else {
 		$strsql = "SELECT ciniki_recipes.id, ciniki_recipes.name, ciniki_recipes.permalink, "
 			. "ciniki_recipes.image_id, "
-			. "ciniki_recipes.category, "
-			. "ciniki_recipes.cuisine, "
 			. "ciniki_recipes.num_servings, "
 			. "ciniki_recipes.webflags, "
 			. "ciniki_recipes.prep_time, "
@@ -82,7 +80,7 @@ function ciniki_recipes_recipeGet($ciniki) {
 			. "ciniki_recipes.description, "
 			. "ciniki_recipes.ingredients, "
 			. "ciniki_recipes.instructions, "
-			. "CONCAT_WS('', IF((ciniki_recipes.webflags&0x01)=0x01, 'hidden', 'visible'), IF((ciniki_recipes.webflags&0x10)=0x02, ', category highlight', '')) AS website "
+			. "CONCAT_WS('', IF((ciniki_recipes.webflags&0x01)=0, 'hidden', 'visible'), IF((ciniki_recipes.webflags&0x10)=0x02, ', highlight', '')) AS website "
 			. "FROM ciniki_recipes "
 			. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
 			. "AND ciniki_recipes.id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
@@ -90,7 +88,7 @@ function ciniki_recipes_recipeGet($ciniki) {
 
 		$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.recipes', array(
 			array('container'=>'recipes', 'fname'=>'id', 'name'=>'recipe',
-				'fields'=>array('id', 'name', 'permalink', 'image_id', 'category', 'cuisine', 
+				'fields'=>array('id', 'name', 'permalink', 'image_id', 
 					'num_servings', 'webflags', 'prep_time', 'roast_time', 'cook_time', 
 					'synopsis', 'description', 'ingredients', 'instructions', 'website'),
 				),

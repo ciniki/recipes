@@ -23,7 +23,7 @@ function ciniki_recipes_web_categories($ciniki, $settings, $business_id) {
 	$strsql = "SELECT DISTINCT category AS name  "
 		. "FROM ciniki_recipes "
 		. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
-		. "AND (ciniki_recipes.webflags&0x01) = 0 "
+		. "AND (ciniki_recipes.webflags&0x01) = 1 "
 		. "AND category <> '' "
 		. "ORDER BY category "
 		. "";
@@ -53,7 +53,7 @@ function ciniki_recipes_web_categories($ciniki, $settings, $business_id) {
 			. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
 			. "AND category = '" . ciniki_core_dbQuote($ciniki, $cat['category']['name']) . "' "
 			. "AND ciniki_recipes.image_id = ciniki_images.id "
-			. "AND (ciniki_recipes.webflags&0x01) = 0 "
+			. "AND (ciniki_recipes.webflags&0x01) = 1 "
 			. "ORDER BY (ciniki_recipes.webflags&0x10) DESC, "
 			. "ciniki_recipes.date_added DESC "
 			. "LIMIT 1";

@@ -343,7 +343,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 			// Add instructions
 			//
 			if( isset($recipe['instructions']) && $recipe['instructions'] != '' ) {
-				$page['blocks'][] = array('type'=>'content', 'title'=>'Instructions', 'content'=>$recipe['instructions']);
+				$page['blocks'][] = array('type'=>'content', 'title'=>'Instructions', 'wide'=>'yes', 'content'=>$recipe['instructions']);
 			}
 
 			//

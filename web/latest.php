@@ -45,7 +45,7 @@ function ciniki_recipes_web_latest($ciniki, $settings, $business_id, $limit) {
 		. "FROM ciniki_recipes "
 		. "LEFT JOIN ciniki_images ON (ciniki_recipes.image_id = ciniki_images.id) "
 		. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
-		. "AND (ciniki_recipes.webflags&0x01) = 0 "
+		. "AND (ciniki_recipes.webflags&0x01) = 1 "
 		. "ORDER BY ciniki_recipes.date_added DESC ";
 
 	$strsql .= "LIMIT $limit ";

@@ -23,17 +23,17 @@ function ciniki_recipes_web_tags($ciniki, $settings, $business_id, $tag_type) {
 	$strsql = "SELECT ciniki_recipe_tags.tag_name, "
 		. "ciniki_recipe_tags.permalink, "
 		. "COUNT(ciniki_recipe_tags.recipe_id) AS num_tags, "
-		. "ciniki_recipes.image_id "
+		. "MAX(ciniki_recipes.image_id) AS image_id "
 		. "FROM ciniki_recipe_tags, ciniki_recipes "
 		. "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
 		. "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $tag_type) . "' "
 		. "AND ciniki_recipe_tags.recipe_id = ciniki_recipes.id "
 		. "AND ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
-		. "AND (ciniki_recipes.webflags&0x01) = 0 "
+		. "AND (ciniki_recipes.webflags&0x01) = 1 "
 		. "GROUP BY ciniki_recipe_tags.tag_name "
-		. "ORDER BY ciniki_recipe_tags.tag_name, ciniki_recipes.date_added DESC "
+		. "ORDER BY ciniki_recipe_tags.tag_name, ciniki_recipes.image_id ASC, ciniki_recipes.date_added DESC "
 		. "";
-	
+
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
 	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.blog', array(
 		array('container'=>'tags', 'fname'=>'permalink', 
@@ -47,34 +47,6 @@ function ciniki_recipes_web_tags($ciniki, $settings, $business_id, $tag_type) {
 	}
 	$tags = $rc['tags'];
 
-/*
-	//
-	// Load highlight images
-	//
-	foreach($categories as $cnum => $cat) {
-		//
-		// Look for the highlight image, or the most recently added image
-		//
-		$strsql = "SELECT ciniki_recipes.image_id AS primary_image_id, ciniki_images.image "
-			. "FROM ciniki_recipes, ciniki_images "
-			. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
-			. "AND category = '" . ciniki_core_dbQuote($ciniki, $cat['category']['name']) . "' "
-			. "AND ciniki_recipes.image_id = ciniki_images.id "
-			. "AND (ciniki_recipes.webflags&0x01) = 0 "
-			. "ORDER BY (ciniki_recipes.webflags&0x10) DESC, "
-			. "ciniki_recipes.date_added DESC "
-			. "LIMIT 1";
-		$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.recipes', 'image');
-		if( $rc['stat'] != 'ok' ) {
-			return $rc;
-		}
-		if( isset($rc['image']) ) {
-			$categories[$cnum]['category']['image_id'] = $rc['image']['primary_image_id'];
-		} else {
-			$categories[$cnum]['category']['image_id'] = 0;
-		}
-	}
-*/
 	return array('stat'=>'ok', 'tags'=>$tags);	
 }
 ?>

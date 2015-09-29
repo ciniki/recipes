@@ -13,7 +13,7 @@ function ciniki_recipes_searchField($ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
-		'field'=>array('required'=>'yes', 'blank'=>'no', 'validlist'=>array('category', 'cuisine'), 'name'=>'Field'),
+		'field'=>array('required'=>'yes', 'blank'=>'no', 'validlist'=>array(), 'name'=>'Field'),
         'start_needle'=>array('required'=>'yes', 'blank'=>'yes', 'name'=>'Search String'), 
         'limit'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Limit'), 
         )); 

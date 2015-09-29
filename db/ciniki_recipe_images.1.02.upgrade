@@ -1,0 +1,5 @@
+#
+# Change flags from Hidden to Visible, flip the bits
+#
+UPDATE ciniki_recipe_images SET webflags = (webflags^(1<<0));
+ALTER TABLE ciniki_recipe_images COMMENT='v1.02';

@@ -3,7 +3,7 @@
 //
 function ciniki_recipes_images() {
 	this.webFlags = {
-		'1':{'name':'Hidden'},
+		'1':{'name':'Visible'},
 		};
 	this.init = function() {
 		//
@@ -92,7 +92,7 @@ function ciniki_recipes_images() {
 				});
 		} else {
 			this.edit.reset();
-			this.edit.data = {};
+			this.edit.data = {'flags':1};
 			this.edit.refresh();
 			this.edit.show(cb);
 		}

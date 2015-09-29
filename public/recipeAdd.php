@@ -25,8 +25,6 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
         'name'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Name'), 
 		'image_id'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'0', 'name'=>'Image'),
-//        'category'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Category'), 
- //       'cuisine'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Cuisine'), 
         'num_servings'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Number of Servings'), 
         'webflags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Web Flags'), 
         'prep_time'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Prep Time'), 
