@@ -109,7 +109,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 			$recipe_permalink = $args['uri_split']['2'];
 			$display = 'recipe';
 			$ciniki['response']['head']['links'][] = array('rel'=>'canonical', 
-				'href'=>$ciniki['request']['domain_base_url'] . '/recipes/' . $recipe_permalink);
+				'href'=>$args['domain_base_url'] . '/' . $recipe_permalink);
 			$ciniki['response']['head']['og']['url'] .= '/' . $recipe_permalink;
 			$base_url .= '/' . $tag_permalink . '/' . $recipe_permalink;
 			
@@ -207,8 +207,6 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 		}
 	}
 	elseif( $display == 'tag' ) {
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'web', 'recipes');
-
 		//
 		// Get the items for the specified category
 		//
@@ -282,7 +280,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 					if( $rc['img']['title'] != '' ) {
 						$page['title'] .= ' - ' . $rc['img']['title'];
 					}
-					$block = array('type'=>'image', 'primary'=>'yes', 'image'=>$rc['img']);
+					$block = array('type'=>'galleryimage', 'primary'=>'yes', 'image'=>$rc['img']);
 					if( $rc['prev'] != null ) {
 						$block['prev'] = array('url'=>$base_url . '/gallery/' . $rc['prev']['permalink'], 'image_id'=>$rc['prev']['image_id']);
 					}
