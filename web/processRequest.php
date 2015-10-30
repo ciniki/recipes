@@ -358,7 +358,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 			if( !isset($settings['page-recipes-share-buttons']) || $settings['page-recipes-share-buttons'] == 'yes' ) {
 				$tags = array();
 				// FIXME: Get tags for recipe
-				$page['blocks'][] = array('type'=>'sharebuttons', 'title'=>$recipe['name'], 'tags'=>$tags);
+				$page['blocks'][] = array('type'=>'sharebuttons', 'pagetitle'=>$recipe['name'], 'tags'=>$tags);
 			}
 
 			//
