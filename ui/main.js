@@ -179,7 +179,7 @@ function ciniki_recipes_main() {
 		this.recipe.data = null;
 		this.recipe.recipe_id = 0;
 		this.recipe.sections = {
-			'_image':{'label':'Image', 'aside':'yes', 'fields':{
+			'_image':{'label':'Image', 'aside':'yes', 'type':'imageform', 'fields':{
 				'image_id':{'label':'', 'type':'image_id', 'hidelabel':'yes', 'history':'no'},
 			}},
 			'info':{'label':'Public Information', 'aside':'yes', 'list':{
@@ -294,7 +294,7 @@ function ciniki_recipes_main() {
 		this.edit.recipe_id = 0;
 		this.edit.data = null;
 		this.edit.sections = {
-			'_image':{'label':'Image', 'aside':'yes', 'fields':{
+			'_image':{'label':'Image', 'aside':'yes', 'type':'imageform', 'fields':{
 				'image_id':{'label':'', 'type':'image_id', 'controls':'all', 'hidelabel':'yes', 'history':'no'},
 			}},
 			'info':{'label':'Public Information', 'aside':'yes', 'type':'simpleform', 'fields':{
