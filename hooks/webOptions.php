@@ -39,7 +39,7 @@ function ciniki_recipes_hooks_webOptions(&$ciniki, $business_id, $args) {
 		$settings = $rc['settings'];
 	}
 
-	$pages['ciniki.recipes'] = array('name'=>'Artist Profiles', 'options'=>array());
+	$pages['ciniki.recipes'] = array('name'=>'Recipes', 'options'=>array());
 
 	return array('stat'=>'ok', 'pages'=>$pages);
 }
