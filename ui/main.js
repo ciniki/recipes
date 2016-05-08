@@ -553,7 +553,7 @@ function ciniki_recipes_main() {
 		if( this.edit.recipe_id > 0 ) {
 			var c = this.edit.serializeForm('no');
 			if( c != '' ) {
-				var rsp = M.api.postJSONFormData('ciniki.recipes.recipeUpdate', 
+				var rsp = M.api.postJSONCb('ciniki.recipes.recipeUpdate', 
 					{'business_id':M.curBusinessID, 'recipe_id':this.edit.recipe_id}, c,
 						function(rsp) {
 							if( rsp.stat != 'ok' ) {
@@ -568,7 +568,7 @@ function ciniki_recipes_main() {
 			}
 		} else {
 			var c = this.edit.serializeForm('yes');
-			var rsp = M.api.postJSONFormData('ciniki.recipes.recipeAdd', 
+			var rsp = M.api.postJSONCb('ciniki.recipes.recipeAdd', 
 				{'business_id':M.curBusinessID}, c,
 					function(rsp) {
 						if( rsp.stat != 'ok' ) {
