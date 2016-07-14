@@ -31,35 +31,35 @@ function ciniki_recipes_recipeSearch($ciniki) {
         return $rc;
     }   
 
-	//
-	// Get the number of faqs in each status for the business, 
-	// if no rows found, then return empty array
-	//
-	$strsql = "SELECT id, name "
-		. "FROM ciniki_recipes "
-		. "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
-		. "AND (name LIKE '" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
-			. "AND name <> '' "
-			. ") "
-		. "";
-	$strsql .= "ORDER BY name COLLATE latin1_general_cs "
-		. "";
-	if( isset($args['limit']) && $args['limit'] != '' && $args['limit'] > 0 ) {
-		$strsql .= "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " ";
-	} else {
-		$strsql .= "LIMIT 25 ";
-	}
-	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-	$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.recipes', array(
-		array('container'=>'recipes', 'fname'=>'name', 'name'=>'recipe', 
-			'fields'=>array('id', 'name')),
-		));
-	if( $rc['stat'] != 'ok' ) {
-		return $rc;
-	}
-	if( !isset($rc['recipes']) || !is_array($rc['recipes']) ) {
-		return array('stat'=>'ok', 'recipes'=>array());
-	}
-	return array('stat'=>'ok', 'recipes'=>$rc['recipes']);
+    //
+    // Get the number of faqs in each status for the business, 
+    // if no rows found, then return empty array
+    //
+    $strsql = "SELECT id, name "
+        . "FROM ciniki_recipes "
+        . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "AND (name LIKE '" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
+            . "AND name <> '' "
+            . ") "
+        . "";
+    $strsql .= "ORDER BY name COLLATE latin1_general_cs "
+        . "";
+    if( isset($args['limit']) && $args['limit'] != '' && $args['limit'] > 0 ) {
+        $strsql .= "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " ";
+    } else {
+        $strsql .= "LIMIT 25 ";
+    }
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
+    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.recipes', array(
+        array('container'=>'recipes', 'fname'=>'name', 'name'=>'recipe', 
+            'fields'=>array('id', 'name')),
+        ));
+    if( $rc['stat'] != 'ok' ) {
+        return $rc;
+    }
+    if( !isset($rc['recipes']) || !is_array($rc['recipes']) ) {
+        return array('stat'=>'ok', 'recipes'=>array());
+    }
+    return array('stat'=>'ok', 'recipes'=>$rc['recipes']);
 }
 ?>

@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id: 		The ID of the business to get the item from.
+// business_id:         The ID of the business to get the item from.
 // 
 // Returns
 // -------
@@ -17,7 +17,7 @@ function ciniki_recipes_recipeTags($ciniki) {
     //  
     // Find all the required and optional arguments
     //  
-	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
         )); 
@@ -30,27 +30,27 @@ function ciniki_recipes_recipeTags($ciniki) {
     // Make sure this module is activated, and
     // check permission to run this function for this business
     //  
-	ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'private', 'checkAccess');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'private', 'checkAccess');
     $rc = ciniki_recipes_checkAccess($ciniki, $args['business_id'], 'ciniki.recipes.recipeTags'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
-	$modules = $rc['modules'];
+    $modules = $rc['modules'];
 
-	//
-	// Get the list of tags
-	//
-	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsList');
-	$rc = ciniki_core_tagsList($ciniki, 'ciniki.recipes', $args['business_id'], 'ciniki_recipe_tags', 20);
-	if( $rc['stat'] != 'ok' ) {
-		return $rc;
-	}
-	if( isset($rc['tags']) ) {
-		$tags = $rc['tags'];
-	} else {
-		$tags = array();
-	}
+    //
+    // Get the list of tags
+    //
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsList');
+    $rc = ciniki_core_tagsList($ciniki, 'ciniki.recipes', $args['business_id'], 'ciniki_recipe_tags', 20);
+    if( $rc['stat'] != 'ok' ) {
+        return $rc;
+    }
+    if( isset($rc['tags']) ) {
+        $tags = $rc['tags'];
+    } else {
+        $tags = array();
+    }
 
-	return array('stat'=>'ok', 'tags'=>$tags);
+    return array('stat'=>'ok', 'tags'=>$tags);
 }
 ?>
