@@ -24,7 +24,7 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
         'name'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Name'), 
-        'image_id'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'0', 'name'=>'Image'),
+        'primary_image_id'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'0', 'name'=>'Image'),
         'num_servings'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Number of Servings'), 
         'webflags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Web Flags'), 
         'prep_time'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Prep Time'), 
@@ -45,6 +45,7 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
         'tag-80'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Collections'),
         'tag-90'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Products'),
         'tag-100'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Contributors'),
+        'image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Additional Image'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
@@ -127,6 +128,40 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
                 return $rc;
             }
         }
+    }
+
+    //
+    // Add additional image if supplied
+    //
+    if( isset($args['image_id']) && $args['image_id'] > 0 ) {
+        //
+        // Get a UUID for use in permalink
+        //
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
+        $rc = ciniki_core_dbUUID($ciniki, 'ciniki.recipes');
+        if( $rc['stat'] != 'ok' ) {
+            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3465', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
+        }
+        $args['uuid'] = $rc['uuid'];
+
+        //
+        // Setup permalink
+        //
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
+        $args['permalink'] = ciniki_core_makePermalink($ciniki, $args['uuid']);
+        $args['name'] = '';
+        $args['recipe_id'] = $recipe_id;
+
+        //
+        // Add the product image to the database
+        //
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
+        $rc = ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.recipes.recipeimage', $args, 0x04);
+        if( $rc['stat'] != 'ok' ) {
+            ciniki_core_dbTransactionRollback($ciniki, 'ciniki.recipes');
+            return $rc;
+        }
+        $recipeimage_id = $rc['id'];
     }
 
     //

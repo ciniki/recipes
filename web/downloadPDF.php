@@ -20,7 +20,7 @@ function ciniki_recipes_web_downloadPDF($ciniki, $settings, $business_id, $perma
     //
     $strsql = "SELECT ciniki_recipes.id, "
         . "ciniki_recipes.name, "
-        . "ciniki_recipes.image_id, "
+        . "ciniki_recipes.primary_image_id, "
         . "ciniki_recipes.num_servings, "
         . "ciniki_recipes.prep_time, "
         . "ciniki_recipes.roast_time, "
@@ -36,7 +36,7 @@ function ciniki_recipes_web_downloadPDF($ciniki, $settings, $business_id, $perma
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
     $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.recipes', array(
         array('container'=>'recipes', 'fname'=>'id',
-            'fields'=>array('id', 'name', 'image_id', 'num_servings', 'prep_time', 'roast_time', 'cook_time', 'synopsis', 'description', 'ingredients', 'instructions')),
+            'fields'=>array('id', 'name', 'primary_image_id', 'num_servings', 'prep_time', 'roast_time', 'cook_time', 'synopsis', 'description', 'ingredients', 'instructions')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;

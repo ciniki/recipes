@@ -18,7 +18,7 @@ function ciniki_recipes_objects($ciniki) {
         'fields'=>array(
             'name'=>array(),
             'permalink'=>array(),
-            'image_id'=>array('ref'=>'ciniki.images.image'),
+            'primary_image_id'=>array('ref'=>'ciniki.images.image'),
             'num_servings'=>array(),
             'webflags'=>array(),
             'prep_time'=>array(),

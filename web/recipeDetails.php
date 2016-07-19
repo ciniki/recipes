@@ -26,7 +26,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
         . "ciniki_recipes.description, "
         . "ciniki_recipes.ingredients, "
         . "ciniki_recipes.instructions, "
-        . "ciniki_recipes.image_id AS primary_image_id, "
+        . "ciniki_recipes.primary_image_id, "
         . "ciniki_recipe_images.image_id, "
         . "ciniki_recipe_images.name AS image_name, "
         . "ciniki_recipe_images.permalink AS image_permalink, "

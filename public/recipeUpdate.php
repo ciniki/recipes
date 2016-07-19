@@ -24,7 +24,7 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
         'recipe_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Recipe'), 
         'name'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Name'), 
-        'image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Image'),
+        'primary_image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Image'),
         'num_servings'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Number of Servings'), 
         'webflags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Web Flags'), 
         'prep_time'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Prep Time'), 

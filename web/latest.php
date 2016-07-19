@@ -33,7 +33,7 @@ function ciniki_recipes_web_latest($ciniki, $settings, $business_id, $limit) {
     $strsql = "SELECT ciniki_recipes.id, "
         . "ciniki_recipes.name AS title, "
         . "ciniki_recipes.permalink, "
-        . "ciniki_recipes.image_id, "
+        . "ciniki_recipes.primary_image_id AS image_id, "
         . "ciniki_recipes.num_servings, "
         . "ciniki_recipes.prep_time, "
         . "ciniki_recipes.roast_time, "
@@ -43,7 +43,7 @@ function ciniki_recipes_web_latest($ciniki, $settings, $business_id, $limit) {
         . "'yes' AS is_details, "
         . "IF(ciniki_images.last_updated > ciniki_recipes.last_updated, UNIX_TIMESTAMP(ciniki_images.last_updated), UNIX_TIMESTAMP(ciniki_recipes.last_updated)) AS last_updated "
         . "FROM ciniki_recipes "
-        . "LEFT JOIN ciniki_images ON (ciniki_recipes.image_id = ciniki_images.id) "
+        . "LEFT JOIN ciniki_images ON (ciniki_recipes.primary_image_id = ciniki_images.id) "
         . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
         . "AND (ciniki_recipes.webflags&0x01) = 1 "
         . "ORDER BY ciniki_recipes.date_added DESC ";

@@ -140,10 +140,9 @@ function ciniki_recipes_recipeList($ciniki) {
             $strsql .= "LIMIT 25 ";
         }
     }
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.recipes', array(
-        array('container'=>'recipes', 'fname'=>'id', 'name'=>'recipe',
-            'fields'=>array('id', 'name')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.recipes', array(
+        array('container'=>'recipes', 'fname'=>'id', 'fields'=>array('id', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
@@ -151,7 +150,11 @@ function ciniki_recipes_recipeList($ciniki) {
     if( isset($rc['recipes']) ) {
         $recipes = $rc['recipes'];
     }
+    $recipe_ids = array();
+    foreach($recipes as $recipe) {
+        $recipe_ids[] = $recipe['id'];
+    }
 
-    return array('stat'=>'ok', 'tags'=>$tags, 'recipes'=>$recipes);
+    return array('stat'=>'ok', 'tags'=>$tags, 'recipes'=>$recipes, 'nplist'=>$recipe_ids);
 }
 ?>

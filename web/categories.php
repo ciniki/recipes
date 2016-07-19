@@ -48,11 +48,11 @@ function ciniki_recipes_web_categories($ciniki, $settings, $business_id) {
         //
         // Look for the highlight image, or the most recently added image
         //
-        $strsql = "SELECT ciniki_recipes.image_id AS primary_image_id, ciniki_images.image "
+        $strsql = "SELECT ciniki_recipes.primary_image_id, ciniki_images.image "
             . "FROM ciniki_recipes, ciniki_images "
             . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
             . "AND category = '" . ciniki_core_dbQuote($ciniki, $cat['category']['name']) . "' "
-            . "AND ciniki_recipes.image_id = ciniki_images.id "
+            . "AND ciniki_recipes.primary_image_id = ciniki_images.id "
             . "AND (ciniki_recipes.webflags&0x01) = 1 "
             . "ORDER BY (ciniki_recipes.webflags&0x10) DESC, "
             . "ciniki_recipes.date_added DESC "

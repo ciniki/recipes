@@ -87,7 +87,6 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
     //
     $base_url = $args['base_url'];
 
-
     //
     // Check if tag type specified
     //
