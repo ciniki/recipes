@@ -554,14 +554,13 @@ function ciniki_recipes_main() {
     };
     this.recipe.remove = function() {
         if( confirm('Are you sure you want to delete \'' + this.data.name + '\'?  All information about it will be removed and unrecoverable.') ) {
-            var rsp = M.api.getJSONCb('ciniki.recipes.recipeDelete', 
-                {'business_id':M.curBusinessID, 'recipe_id':this.recipe_id}, function(rsp) {
-                    if( rsp.stat != 'ok' ) {
-                        M.api.err(rsp);
-                        return false;
-                    }
-                    M.ciniki_recipes_main.recipe.close();
-                });
+            M.api.getJSONCb('ciniki.recipes.recipeDelete', {'business_id':M.curBusinessID, 'recipe_id':this.recipe_id}, function(rsp) {
+                if( rsp.stat != 'ok' ) {
+                    M.api.err(rsp);
+                    return false;
+                }
+                M.ciniki_recipes_main.recipe.close();
+            });
         }
     };
     this.recipe.nextButtonFn = function() {

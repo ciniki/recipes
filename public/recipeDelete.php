@@ -96,8 +96,8 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     //
     // run ciniki.recipes.recipeDelete hooks
     //
-    $rc = ciniki_core_methodFishHooks($ciniki, $args['business_id'], 'ciniki.recipes.recipeDelete', 
-        array('recipe_id'=>$args['recipe_id']));
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'methodFishHooks');
+    $rc = ciniki_core_methodFishHooks($ciniki, $args['business_id'], 'ciniki.recipes.recipeDelete', array('recipe_id'=>$args['recipe_id']));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -109,8 +109,8 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     //
     // Remove the recipe
     //
-    $rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.recipes.recipe',
-        $args['recipe_id'], $uuid);
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectDelete');
+    $rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.recipes.recipe', $args['recipe_id'], $uuid);
     if( $rc['stat'] != 'ok' ) {
         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.recipes');
         return $rc;
