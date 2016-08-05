@@ -140,7 +140,7 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
         $rc = ciniki_core_dbUUID($ciniki, 'ciniki.recipes');
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3465', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3540', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
         }
         $args['uuid'] = $rc['uuid'];
 
