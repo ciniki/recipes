@@ -39,7 +39,7 @@ function ciniki_recipes_recipeSearch($ciniki) {
         . "FROM ciniki_recipes "
         . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
         . "AND (name LIKE '" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
-            . "AND name <> '' "
+            . "OR name LIKE '% " . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
             . ") "
         . "";
     $strsql .= "ORDER BY name COLLATE latin1_general_cs "
@@ -49,10 +49,9 @@ function ciniki_recipes_recipeSearch($ciniki) {
     } else {
         $strsql .= "LIMIT 25 ";
     }
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
-    $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.recipes', array(
-        array('container'=>'recipes', 'fname'=>'name', 'name'=>'recipe', 
-            'fields'=>array('id', 'name')),
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
+    $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.recipes', array(
+        array('container'=>'recipes', 'fname'=>'name', 'fields'=>array('id', 'name')),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;

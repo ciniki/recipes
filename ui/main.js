@@ -124,22 +124,22 @@ function ciniki_recipes_main() {
         };
     this.menu.sections = this.menu.forms['10']; 
 //      this.menu.listby = 'category';
-//      this.menu.liveSearchCb = function(s, i, v) {
-//          if( v != '' ) {
-//              M.api.getJSONBgCb('ciniki.recipes.searchQuick', {'business_id':M.curBusinessID, 'start_needle':v, 'limit':'15'},
-//                  function(rsp) {
-//                      M.ciniki_recipes_main.menu.liveSearchShow(s, null, M.gE(M.ciniki_recipes_main.menu.panelUID + '_' + s), rsp.items);
-//                  });
-//          }
-//          return true;
-//      };
-//      this.menu.liveSearchResultValue = function(s, f, i, j, d) {
-//          return this.cellValue(s, i, j, d);
-//      };
-//      this.menu.liveSearchResultRowFn = function(s, f, i, j, d) {
-//          return 'M.ciniki_recipes_main.showItem(\'M.ciniki_recipes_main.menu.open(null);\', \'' + d.item.id + '\');'; 
-//      };
-//      this.menu.liveSearchResultRowStyle = function(s, f, i, d) { return ''; };
+    this.menu.liveSearchCb = function(s, i, v) {
+        if( v != '' ) {
+            M.api.getJSONBgCb('ciniki.recipes.recipeSearch', {'business_id':M.curBusinessID, 'start_needle':v, 'limit':'15'},
+                function(rsp) {
+                    M.ciniki_recipes_main.menu.liveSearchShow(s, null, M.gE(M.ciniki_recipes_main.menu.panelUID + '_' + s), rsp.recipes);
+                });
+        }
+        return true;
+    };
+    this.menu.liveSearchResultValue = function(s, f, i, j, d) {
+        return d.name; 
+    };
+    this.menu.liveSearchResultRowFn = function(s, f, i, j, d) {
+        return 'M.ciniki_recipes_main.recipe.open(\'M.ciniki_recipes_main.menu.open();\', \'' + d.id + '\');'; 
+    };
+    this.menu.liveSearchResultRowStyle = function(s, f, i, d) { return ''; };
 //      Currently not allowing full search
 //      this.menu.liveSearchSubmitFn = function(s, search_str) {
 //          M.ciniki_recipes_main.searchArtCatalog('M.ciniki_recipes_main.menu.open();', search_str);
@@ -547,6 +547,7 @@ function ciniki_recipes_main() {
                     M.api.err(rsp);
                     return false;
                 } else {
+                    M.ciniki_recipes_main.recipe.recipe_id = rsp.id;
                     eval(cb);
                 }
             });
