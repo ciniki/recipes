@@ -52,7 +52,7 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['recipe']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1360', 'msg'=>'Unable to find existing recipe'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.recipes.14', 'msg'=>'Unable to find existing recipe'));
     }
     $uuid = $rc['recipe']['uuid'];
 

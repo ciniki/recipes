@@ -57,7 +57,7 @@ function ciniki_recipes_imageUpdate(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['item']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1284', 'msg'=>'Event image not found'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.recipes.10', 'msg'=>'Event image not found'));
     }
     $item = $rc['item'];
 
@@ -81,7 +81,7 @@ function ciniki_recipes_imageUpdate(&$ciniki) {
             return $rc;
         }
         if( $rc['num_rows'] > 0 ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1268', 'msg'=>'You already have an image with this name, please choose another name'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.recipes.11', 'msg'=>'You already have an image with this name, please choose another name'));
         }
     }
 

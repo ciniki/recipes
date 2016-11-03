@@ -98,7 +98,7 @@ function ciniki_recipes_recipeGet($ciniki) {
             return $rc;
         }
         if( !isset($rc['recipes']) ) {
-            return array('stat'=>'ok', 'err'=>array('pkg'=>'ciniki', 'code'=>'1363', 'msg'=>'Unable to find recipe'));
+            return array('stat'=>'ok', 'err'=>array('code'=>'ciniki.recipes.15', 'msg'=>'Unable to find recipe'));
         }
         $recipe = $rc['recipes'][0]['recipe'];
 

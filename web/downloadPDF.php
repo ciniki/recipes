@@ -42,12 +42,12 @@ function ciniki_recipes_web_downloadPDF($ciniki, $settings, $business_id, $perma
         return $rc;
     }
     if( !isset($rc['recipes']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2533', 'msg'=>'Unable to find recipe'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.recipes.17', 'msg'=>'Unable to find recipe'));
     }
     $recipes = $rc['recipes'];
 
     if( count($recipes) < 1 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2534', 'msg'=>'Unable to find recipe'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.recipes.18', 'msg'=>'Unable to find recipe'));
     }
 
     //
@@ -57,7 +57,7 @@ function ciniki_recipes_web_downloadPDF($ciniki, $settings, $business_id, $perma
 //      && $args['layout'] != 'double' 
 //      && $args['layout'] != 'triple' 
         ) {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2535', 'msg'=>"That recipe is not available in the format you requested."));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.recipes.19', 'msg'=>"That recipe is not available in the format you requested."));
     }
 
     if( !isset($args['title']) || $args['title'] == '' ) {

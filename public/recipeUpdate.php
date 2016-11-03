@@ -76,7 +76,7 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
             return $rc;
         }
         if( $rc['num_rows'] > 0 ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1357', 'msg'=>'You already have a recipe with this name, please choose another name'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.recipes.16', 'msg'=>'You already have a recipe with this name, please choose another name'));
         }
     }
 

@@ -19,7 +19,7 @@
 function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $args) {
     
     if( !isset($ciniki['business']['modules']['ciniki.recipes']) ) {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2570', 'msg'=>"I'm sorry, the page you requested does not exist."));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.recipes.20', 'msg'=>"I'm sorry, the page you requested does not exist."));
     }
     $page = array(
         'title'=>$args['page_title'],
@@ -61,7 +61,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
         //
         // If there was an error locating the files, display generic error
         //
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2554', 'msg'=>'The file you requested does not exist.'));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.recipes.21', 'msg'=>'The file you requested does not exist.'));
     }
 
     //

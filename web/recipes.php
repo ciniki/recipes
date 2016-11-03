@@ -39,7 +39,7 @@ if( isset($args['tag_type']) && $args['tag_type'] != '' && isset($args['tag_perm
             . "AND (ciniki_recipes.webflags&0x01) = 1 "
             . "";
     } else {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1555', 'msg'=>"Unable to find recipes."));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.recipes.23', 'msg'=>"Unable to find recipes."));
     }
     $strsql .= "ORDER BY ciniki_recipes.name ASC ";
 

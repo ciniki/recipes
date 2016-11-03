@@ -77,7 +77,7 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
         return $rc;
     }
     if( $rc['num_rows'] > 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'1355', 'msg'=>'You already have a recipe with this name, please choose another name.'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.recipes.12', 'msg'=>'You already have a recipe with this name, please choose another name.'));
     }
 
     //  
@@ -140,7 +140,7 @@ function ciniki_recipes_recipeAdd(&$ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
         $rc = ciniki_core_dbUUID($ciniki, 'ciniki.recipes');
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3540', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.recipes.13', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
         }
         $args['uuid'] = $rc['uuid'];
 

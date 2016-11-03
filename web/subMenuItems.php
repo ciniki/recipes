@@ -19,7 +19,7 @@
 function ciniki_recipes_web_subMenuItems(&$ciniki, $settings, $business_id, $args) {
     
     if( !isset($ciniki['business']['modules']['ciniki.recipes']) ) {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2574', 'msg'=>"I'm sorry, the file you requested does not exist."));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.recipes.24', 'msg'=>"I'm sorry, the file you requested does not exist."));
     }
 
     //
