@@ -468,7 +468,7 @@ function ciniki_recipes_main() {
                     M.ciniki_recipes_main.recipe.refreshImages();
                 });
         } else {
-            M.api.getJSONCb('ciniki.recipes.imageAdd', {'business_id':M.curBusinessID, 'image_id':iid, 'name':'', 'recipe_id':this.recipe_id}, function(rsp) {
+            M.api.getJSONCb('ciniki.recipes.imageAdd', {'business_id':M.curBusinessID, 'image_id':iid, 'name':'', 'recipe_id':this.recipe_id, 'webflags':1}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -633,7 +633,7 @@ function ciniki_recipes_main() {
             });
         } else {
             this.reset();
-            this.data = {'flags':1};
+            this.data = {'webflags':1};
             this.refresh();
             this.show(cb);
         }
