@@ -256,6 +256,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
         // Reset page title to be the recipe name
         //
         $page['title'] .= ($page['title']!=''?' - ':'') . $recipe['name'];
+        $ciniki['response']['head']['og']['title'] = strip_tags($recipe['name']);
 
         if( isset($tag_permalink) && $tag_permalink != '' ) {
             $page['breadcrumbs'][] = array('name'=>$tag_types[$type_permalink]['name'], 'url'=>$args['base_url'] . '/' . $type_permalink);
