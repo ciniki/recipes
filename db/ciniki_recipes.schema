@@ -44,7 +44,7 @@ create table ciniki_recipes (
     name varchar(200) not null,
     permalink varchar(200) not null,
     primary_image_id int not null,
-    num_servings int not null,
+    num_servings varchar(50) not null,
     webflags tinyint unsigned not null,
     prep_time varchar(200) not null,
     roast_time varchar(200) not null,
@@ -58,4 +58,4 @@ create table ciniki_recipes (
     primary key (id),
     unique index (permalink, business_id),
     index business_uuid (business_id, uuid, last_updated)
-) ENGINE='InnoDB', COMMENT='v1.04';
+) ENGINE='InnoDB', COMMENT='v1.05';

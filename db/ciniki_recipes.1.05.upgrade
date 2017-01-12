@@ -1,0 +1,5 @@
+#
+# Add new column synopsis
+#
+ALTER TABLE ciniki_recipes MODIFY num_servings varchar(50) not null;
+ALTER TABLE ciniki_recipes COMMENT='v1.05';
