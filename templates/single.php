@@ -113,7 +113,7 @@ function ciniki_recipes_templates_single($ciniki, $business_id, $categories, $ar
             //
             $ingredients_box_width = ($this->getPageWidth() - $this->left_margin - $this->right_margin - $this->middle_margin);
             $image = NULL;
-            if( $recipe['image_id'] > 0 ) {
+            if( isset($recipe['image_id']) && $recipe['image_id'] > 0 ) {
                 $rc = ciniki_images_loadCacheOriginal($ciniki, $business_id, $recipe['image_id'], 2000, 2000);
                 if( $rc['stat'] == 'ok' ) {
                     $image = $rc['image'];
