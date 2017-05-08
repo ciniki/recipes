@@ -678,6 +678,8 @@ function ciniki_recipes_main() {
     };
     this.image.addButton('save', 'Save', 'M.ciniki_recipes_main.image.save();');
     this.image.addClose('Cancel');
+
+
     this.start = function(cb, appPrefix, aG) {
         args = {};
         if( aG != null ) {
