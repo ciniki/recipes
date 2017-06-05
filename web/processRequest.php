@@ -176,6 +176,10 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
                 break;
             }
         }
+        if( !isset($tag_type) ) {   
+            $display = 'nothing';
+            $page['blocks'][] = array('type'=>'message', 'content'=>"I'm sorry, but we don't have any recipes at this time, please check back later.");
+        }
     }
 
     //
