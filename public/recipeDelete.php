@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to remove the recipe from.
+// tnid:         The ID of the tenant to remove the recipe from.
 // recipe_id:           The ID of the recipe to be removed.
 // 
 // Returns
@@ -21,7 +21,7 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'recipe_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Recipe'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
@@ -31,10 +31,10 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'private', 'checkAccess');
-    $rc = ciniki_recipes_checkAccess($ciniki, $args['business_id'], 'ciniki.recipes.recipeDelete'); 
+    $rc = ciniki_recipes_checkAccess($ciniki, $args['tnid'], 'ciniki.recipes.recipeDelete'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -44,7 +44,7 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     // Get the uuid of the recipes to be deleted
     //
     $strsql = "SELECT uuid FROM ciniki_recipes "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.recipes', 'recipe');
@@ -74,7 +74,7 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     // Remove any additional images
     //
     $strsql = "SELECT id, uuid, image_id FROM ciniki_recipe_images "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND recipe_id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.recipes', 'image');
@@ -84,7 +84,7 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     if( isset($rc['rows']) ) {
         $images = $rc['rows'];
         foreach($rc['rows'] as $rid => $row) {
-            $rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.recipes.image',
+            $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.recipes.image',
                 $row['id'], $row['uuid'], 0x04);
             if( $rc['stat'] != 'ok' ) {
                 ciniki_core_dbTransactionRollback($ciniki, 'ciniki.recipes');
@@ -97,7 +97,7 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     // run ciniki.recipes.recipeDelete hooks
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'methodFishHooks');
-    $rc = ciniki_core_methodFishHooks($ciniki, $args['business_id'], 'ciniki.recipes.recipeDelete', array('recipe_id'=>$args['recipe_id']));
+    $rc = ciniki_core_methodFishHooks($ciniki, $args['tnid'], 'ciniki.recipes.recipeDelete', array('recipe_id'=>$args['recipe_id']));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -110,7 +110,7 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     // Remove the recipe
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectDelete');
-    $rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.recipes.recipe', $args['recipe_id'], $uuid);
+    $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.recipes.recipe', $args['recipe_id'], $uuid);
     if( $rc['stat'] != 'ok' ) {
         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.recipes');
         return $rc;
@@ -125,11 +125,11 @@ function ciniki_recipes_recipeDelete(&$ciniki) {
     }
 
     //
-    // Update the last_change date in the business modules
+    // Update the last_change date in the tenant modules
     // Ignore the result, as we don't want to stop user updates if this fails.
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
-    ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'recipes');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'recipes');
 
     return array('stat'=>'ok');
 }

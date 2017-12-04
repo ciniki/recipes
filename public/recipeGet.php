@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to get the recipe from.
+// tnid:         The ID of the tenant to get the recipe from.
 // recipe_id:           The ID of the recipe to get.
 // 
 // Returns
@@ -20,7 +20,7 @@ function ciniki_recipes_recipeGet($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'recipe_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Item'), 
         'images'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Images'),
         'tags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Tags'),
@@ -32,10 +32,10 @@ function ciniki_recipes_recipeGet($ciniki) {
     
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'private', 'checkAccess');
-    $rc = ciniki_recipes_checkAccess($ciniki, $args['business_id'], 'ciniki.recipes.recipeGet'); 
+    $rc = ciniki_recipes_checkAccess($ciniki, $args['tnid'], 'ciniki.recipes.recipeGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -83,7 +83,7 @@ function ciniki_recipes_recipeGet($ciniki) {
             . "ciniki_recipes.instructions, "
             . "CONCAT_WS('', IF((ciniki_recipes.webflags&0x01)=0, 'hidden', 'visible'), IF((ciniki_recipes.webflags&0x10)=0x02, ', highlight', '')) AS website "
             . "FROM ciniki_recipes "
-            . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_recipes.id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
             . "";
 
@@ -108,7 +108,7 @@ function ciniki_recipes_recipeGet($ciniki) {
         $strsql = "SELECT CONCAT('tag-', tag_type) AS tagtype, tag_type, tag_name AS lists "
             . "FROM ciniki_recipe_tags "
             . "WHERE recipe_id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
-            . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "ORDER BY tag_type, tag_name "
             . "";
         $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.recipes', array(
@@ -132,7 +132,7 @@ function ciniki_recipes_recipeGet($ciniki) {
             $strsql = "SELECT id, image_id, name, sequence, webflags, description "
                 . "FROM ciniki_recipe_images "
                 . "WHERE recipe_id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
-                . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "ORDER BY sequence, date_added, name "
                 . "";
             $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.recipes', array(
@@ -146,7 +146,7 @@ function ciniki_recipes_recipeGet($ciniki) {
                 $recipe['images'] = $rc['images'];
                 foreach($recipe['images'] as $inum => $img) {
                     if( isset($img['image_id']) && $img['image_id'] > 0 ) {
-                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['business_id'], $img['image_id'], 75);
+                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['tnid'], $img['image_id'], 75);
                         if( $rc['stat'] != 'ok' ) {
                             return $rc;
                         }
@@ -167,7 +167,7 @@ function ciniki_recipes_recipeGet($ciniki) {
         //
         $strsql = "SELECT DISTINCT CONCAT('tag-', tag_type) AS tagtype, tag_type, tag_name AS tag_names "
             . "FROM ciniki_recipe_tags "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "ORDER BY tag_type, tag_name "
             . "";
         $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.recipes', array(

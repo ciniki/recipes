@@ -7,7 +7,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:     The ID of the business to get the list from.
+// tnid:     The ID of the tenant to get the list from.
 // 
 // Returns
 // -------
@@ -18,7 +18,7 @@ function ciniki_recipes_recipeList($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'tag_type'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Type'),
         'tag_name'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Tag'),
         'limit'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Limit'), 
@@ -30,10 +30,10 @@ function ciniki_recipes_recipeList($ciniki) {
     
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'private', 'checkAccess');
-    $rc = ciniki_recipes_checkAccess($ciniki, $args['business_id'], 'ciniki.recipes.recipeList'); 
+    $rc = ciniki_recipes_checkAccess($ciniki, $args['tnid'], 'ciniki.recipes.recipeList'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -47,7 +47,7 @@ function ciniki_recipes_recipeList($ciniki) {
     if( isset($args['tag_type']) && $args['tag_type'] != '' ) {
         $strsql = "SELECT tag_type, tag_name, COUNT(recipe_id) AS num_recipes "
             . "FROM ciniki_recipe_tags "
-            . "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_recipe_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
             . "AND ciniki_recipe_tags.recipe_id > 0 "
             . "GROUP BY tag_type, tag_name "
@@ -73,9 +73,9 @@ function ciniki_recipes_recipeList($ciniki) {
             . "LEFT JOIN ciniki_recipe_tags ON ("
                 . "ciniki_recipes.id = ciniki_recipe_tags.recipe_id "
                 . "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
-                . "AND ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND ciniki_recipe_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . ") "
-            . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ISNULL(tag_name) "
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.recipes', 'untagged');
@@ -103,35 +103,35 @@ function ciniki_recipes_recipeList($ciniki) {
             . "LEFT JOIN ciniki_recipe_tags ON ("
                 . "ciniki_recipes.id = ciniki_recipe_tags.recipe_id "
                 . "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
-                . "AND ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND ciniki_recipe_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . ") "
-            . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ISNULL(ciniki_recipe_tags.tag_name) "
             . "ORDER BY name "
             . "";
     } elseif( isset($args['tag_type']) && $args['tag_type'] != '' && isset($args['tag_name']) && $args['tag_name'] != '' ) {
         $strsql = "SELECT ciniki_recipes.id, ciniki_recipes.name "  
             . "FROM ciniki_recipe_tags, ciniki_recipes "
-            . "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_recipe_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
             . "AND ciniki_recipe_tags.tag_name = '" . ciniki_core_dbQuote($ciniki, $args['tag_name']) . "' "
             . "AND ciniki_recipe_tags.recipe_id = ciniki_recipes.id "
-            . "AND ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "AND ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "ORDER BY name "
             . "";
     } elseif( isset($args['tag_type']) && $args['tag_type'] != '' ) {
         $strsql = "SELECT ciniki_recipes.id, ciniki_recipes.name "  
             . "FROM ciniki_recipe_tags, ciniki_recipes "
-            . "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_recipe_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
             . "AND ciniki_recipe_tags.recipe_id = ciniki_recipes.id "
-            . "AND ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "AND ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "ORDER BY name "
             . "";
     } else {
         $strsql = "SELECT ciniki_recipes.id, ciniki_recipes.name "  
             . "FROM ciniki_recipes "
-            . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "ORDER BY last_updated "
             . "";
         if( isset($args['limit']) && $args['limit'] != '' && $args['limit'] > 0 ) {

@@ -8,7 +8,7 @@
 // ---------
 // ciniki:
 // settings:        The web settings structure.
-// business_id:     The ID of the business to get events for.
+// tnid:     The ID of the tenant to get events for.
 //
 // Returns
 // -------
@@ -18,11 +18,11 @@
 //      ...
 // </categories>
 //
-function ciniki_recipes_web_categories($ciniki, $settings, $business_id) {
+function ciniki_recipes_web_categories($ciniki, $settings, $tnid) {
 
     $strsql = "SELECT DISTINCT category AS name  "
         . "FROM ciniki_recipes "
-        . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND (ciniki_recipes.webflags&0x01) = 1 "
         . "AND category <> '' "
         . "ORDER BY category "
@@ -50,7 +50,7 @@ function ciniki_recipes_web_categories($ciniki, $settings, $business_id) {
         //
         $strsql = "SELECT ciniki_recipes.primary_image_id, ciniki_images.image "
             . "FROM ciniki_recipes, ciniki_images "
-            . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND category = '" . ciniki_core_dbQuote($ciniki, $cat['category']['name']) . "' "
             . "AND ciniki_recipes.primary_image_id = ciniki_images.id "
             . "AND (ciniki_recipes.webflags&0x01) = 1 "

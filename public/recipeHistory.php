@@ -10,7 +10,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to get the details for.
+// tnid:         The ID of the tenant to get the details for.
 // recipe_id:           The ID of the recipe to get the history for.
 // field:               The field to get the history for. This can be any of the elements 
 //                      returned by the ciniki.recipes.get method.
@@ -28,7 +28,7 @@ function ciniki_recipes_recipeHistory($ciniki) {
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'recipe_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Recipe'), 
         'field'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'field'), 
         ));
@@ -38,16 +38,16 @@ function ciniki_recipes_recipeHistory($ciniki) {
     $args = $rc['args'];
     
     //
-    // Check access to business_id as owner, or sys admin
+    // Check access to tnid as owner, or sys admin
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'private', 'checkAccess');
-    $rc = ciniki_recipes_checkAccess($ciniki, $args['business_id'], 'ciniki.recipes.recipeHistory');
+    $rc = ciniki_recipes_checkAccess($ciniki, $args['tnid'], 'ciniki.recipes.recipeHistory');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbGetModuleHistory');
     return ciniki_core_dbGetModuleHistory($ciniki, 'ciniki.recipes', 'ciniki_recipe_history', 
-        $args['business_id'], 'ciniki_recipes', $args['recipe_id'], $args['field']);
+        $args['tnid'], 'ciniki_recipes', $args['recipe_id'], $args['field']);
 }
 ?>

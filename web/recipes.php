@@ -8,12 +8,12 @@
 // ---------
 // ciniki:
 // settings:        The web settings structure.
-// business_id:     The ID of the business to get events for.
+// tnid:     The ID of the tenant to get events for.
 //
 // Returns
 // -------
 //
-function ciniki_recipes_web_recipes($ciniki, $settings, $business_id, $args) {
+function ciniki_recipes_web_recipes($ciniki, $settings, $tnid, $args) {
 
     $strsql = "SELECT ciniki_recipes.id, "
         . "ciniki_recipes.name AS title, "
@@ -31,11 +31,11 @@ function ciniki_recipes_web_recipes($ciniki, $settings, $business_id, $args) {
 if( isset($args['tag_type']) && $args['tag_type'] != '' && isset($args['tag_permalink']) && $args['tag_permalink'] != '' ) {
         $strsql .= ", ciniki_recipe_tags.tag_name "
             . "FROM ciniki_recipe_tags, ciniki_recipes "
-            . "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE ciniki_recipe_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND ciniki_recipe_tags.tag_type = '" . ciniki_core_dbQuote($ciniki, $args['tag_type']) . "' "
             . "AND ciniki_recipe_tags.permalink = '" . ciniki_core_dbQuote($ciniki, $args['tag_permalink']) . "' "
             . "AND ciniki_recipe_tags.recipe_id = ciniki_recipes.id "
-            . "AND ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "AND ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND (ciniki_recipes.webflags&0x01) = 1 "
             . "";
     } else {

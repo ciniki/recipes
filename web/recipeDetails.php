@@ -9,11 +9,11 @@
 // Returns
 // -------
 //
-function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $permalink, $tag_permalink) {
+function ciniki_recipes_web_recipeDetails($ciniki, $settings, $tnid, $permalink, $tag_permalink) {
 
     $modules = array();
-    if( isset($ciniki['business']['modules']) ) {
-        $modules = $ciniki['business']['modules'];
+    if( isset($ciniki['tenant']['modules']) ) {
+        $modules = $ciniki['tenant']['modules'];
     }
 
     $strsql = "SELECT ciniki_recipes.id, "
@@ -37,7 +37,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
             . "ciniki_recipes.id = ciniki_recipe_images.recipe_id "
             . "AND (ciniki_recipe_images.webflags&0x01) = 1 "
             . ") "
-        . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_recipes.permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
         . "AND (ciniki_recipes.webflags&0x01) = 1 "
         . "ORDER BY ciniki_recipe_images.sequence, ciniki_recipe_images.date_added, ciniki_recipe_images.name "
@@ -67,7 +67,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
     $strsql = "SELECT id, tag_type, tag_name, permalink "
         . "FROM ciniki_recipe_tags "
         . "WHERE recipe_id = '" . ciniki_core_dbQuote($ciniki, $recipe['id']) . "' "
-        . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "ORDER BY tag_type, tag_name "
         . "";
     $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.recipes', array(
@@ -108,13 +108,13 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
             . "LEFT JOIN ciniki_recipes ON ((ciniki_recipe_relationships.recipe_id = ciniki_recipes.id "
                     . "OR ciniki_recipe_relationships.related_id = ciniki_recipes.id) "
                 . "AND ciniki_recipes.id <> '" . ciniki_core_dbQuote($ciniki, $recipe['id']) . "' "
-                . "AND ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+                . "AND ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                 . ") "
             . "WHERE (ciniki_recipe_relationships.recipe_id = '" . ciniki_core_dbQuote($ciniki, $recipe['id']) . "' "
                 . "OR ciniki_recipe_relationships.related_id = '" . ciniki_core_dbQuote($ciniki, $recipe['id']) . "' "
                 . ") "
             . "AND ciniki_recipe_relationships.relationship_type = 10 "
-            . "AND ciniki_recipe_relationships.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "AND ciniki_recipe_relationships.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . ""; 
         $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.recipes', array(
             array('container'=>'recipes', 'fname'=>'id',
@@ -134,7 +134,7 @@ function ciniki_recipes_web_recipeDetails($ciniki, $settings, $business_id, $per
     if( $tag_permalink != '' ) {
         $strsql = "SELECT DISTINCT tag_name "
             . "FROM ciniki_recipe_tags "
-            . "WHERE ciniki_recipe_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE ciniki_recipe_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND ciniki_recipe_tags.recipe_id = '" . ciniki_core_dbQuote($ciniki, $recipe['id']) . "' "
             . "LIMIT 1 "
             . "";

@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:     The ID of the business to the recipe is a part of.
+// tnid:     The ID of the tenant to the recipe is a part of.
 // recipe_id:       The ID of the recipe to update.
 //
 // Returns
@@ -21,7 +21,7 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'recipe_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Recipe'), 
         'name'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Name'), 
         'primary_image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Image'),
@@ -53,10 +53,10 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'private', 'checkAccess');
-    $rc = ciniki_recipes_checkAccess($ciniki, $args['business_id'], 'ciniki.recipes.recipeUpdate'); 
+    $rc = ciniki_recipes_checkAccess($ciniki, $args['tnid'], 'ciniki.recipes.recipeUpdate'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -67,7 +67,7 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
         // Make sure the permalink is unique
         //
         $strsql = "SELECT id, name, permalink FROM ciniki_recipes "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
             . "AND id <> '" . ciniki_core_dbQuote($ciniki, $args['recipe_id']) . "' "
             . "";
@@ -96,7 +96,7 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
     // Update the recipe
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectUpdate');
-    $rc = ciniki_core_objectUpdate($ciniki, $args['business_id'], 'ciniki.recipes.recipe', 
+    $rc = ciniki_core_objectUpdate($ciniki, $args['tnid'], 'ciniki.recipes.recipe', 
         $args['recipe_id'], $args);
     if( $rc['stat'] != 'ok' ) {
         return $rc;
@@ -120,7 +120,7 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
     foreach($tag_types as $tag_type => $arg_name) {
         if( isset($args['tag-' . $tag_type]) ) {
             ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
-            $rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.recipes', 'tag', $args['business_id'],
+            $rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.recipes', 'tag', $args['tnid'],
                 'ciniki_recipe_tags', 'ciniki_recipe_history',
                 'recipe_id', $args['recipe_id'], $tag_type, $args['tag-' . $tag_type]);
             if( $rc['stat'] != 'ok' ) {
@@ -139,11 +139,11 @@ function ciniki_recipes_recipeUpdate(&$ciniki) {
     }
 
     //
-    // Update the last_change date in the business modules
+    // Update the last_change date in the tenant modules
     // Ignore the result, as we don't want to stop user updates if this fails.
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
-    ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'recipes');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'recipes');
 
     return array('stat'=>'ok');
 }

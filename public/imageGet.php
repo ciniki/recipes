@@ -7,7 +7,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to add the recipe to.
+// tnid:         The ID of the tenant to add the recipe to.
 // recipe_image_id: The ID of the recipe image to get.
 //
 // Returns
@@ -19,7 +19,7 @@ function ciniki_recipes_imageGet($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'recipe_image_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Event Image'),
         )); 
     if( $rc['stat'] != 'ok' ) { 
@@ -29,10 +29,10 @@ function ciniki_recipes_imageGet($ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'private', 'checkAccess');
-    $rc = ciniki_recipes_checkAccess($ciniki, $args['business_id'], 'ciniki.recipes.imageGet'); 
+    $rc = ciniki_recipes_checkAccess($ciniki, $args['tnid'], 'ciniki.recipes.imageGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -51,7 +51,7 @@ function ciniki_recipes_imageGet($ciniki) {
         . "ciniki_recipe_images.image_id, "
         . "ciniki_recipe_images.description "
         . "FROM ciniki_recipe_images "
-        . "WHERE ciniki_recipe_images.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE ciniki_recipe_images.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND ciniki_recipe_images.id = '" . ciniki_core_dbQuote($ciniki, $args['recipe_image_id']) . "' "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');

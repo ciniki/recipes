@@ -1,7 +1,7 @@
-Ciniki - Small Business Management Platform
+Ciniki - Multitenant Cloud Platform
 ===========================================
 
-The recipes module stores information about recipes used by the business,
+The recipes module stores information about recipes used by the tenant,
 typically to be displayed on their website.
 
 License

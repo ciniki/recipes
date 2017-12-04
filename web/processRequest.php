@@ -8,7 +8,7 @@
 // ---------
 // ciniki:
 // settings:        The web settings structure.
-// business_id:     The ID of the business to get events for.
+// tnid:     The ID of the tenant to get events for.
 //
 // args:            The possible arguments for posts
 //
@@ -16,9 +16,9 @@
 // Returns
 // -------
 //
-function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $args) {
+function ciniki_recipes_web_processRequest(&$ciniki, $settings, $tnid, $args) {
     
-    if( !isset($ciniki['business']['modules']['ciniki.recipes']) ) {
+    if( !isset($ciniki['tenant']['modules']['ciniki.recipes']) ) {
         return array('stat'=>'404', 'err'=>array('code'=>'ciniki.recipes.20', 'msg'=>"I'm sorry, the page you requested does not exist."));
     }
     $page = array(
@@ -31,16 +31,16 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
     // Setup the various tag types that will turn into menus
     //
     $tag_types = array(
-        'meals'=>array('name'=>'Meals & Courses', 'tag_type'=>'10', 'visible'=>($ciniki['business']['modules']['ciniki.recipes']['flags']&0x01)>0?'yes':'no'),
-        'ingredients'=>array('name'=>'Main Ingredients', 'tag_type'=>'20', 'visible'=>($ciniki['business']['modules']['ciniki.recipes']['flags']&0x02)>0?'yes':'no'),
-        'cuisines'=>array('name'=>'Cuisines', 'tag_type'=>'30', 'visible'=>($ciniki['business']['modules']['ciniki.recipes']['flags']&0x04)>0?'yes':'no'),
-        'methods'=>array('name'=>'Methods', 'tag_type'=>'40', 'visible'=>($ciniki['business']['modules']['ciniki.recipes']['flags']&0x08)>0?'yes':'no'),
-        'occasions'=>array('name'=>'Occasions', 'tag_type'=>'50', 'visible'=>($ciniki['business']['modules']['ciniki.recipes']['flags']&0x10)>0?'yes':'no'),
-        'diets'=>array('name'=>'Diets', 'tag_type'=>'60', 'visible'=>($ciniki['business']['modules']['ciniki.recipes']['flags']&0x20)>0?'yes':'no'),
-        'seasons'=>array('name'=>'Seasons', 'tag_type'=>'70', 'visible'=>($ciniki['business']['modules']['ciniki.recipes']['flags']&0x40)>0?'yes':'no'),
-        'collections'=>array('name'=>'Collections', 'tag_type'=>'80', 'visible'=>($ciniki['business']['modules']['ciniki.recipes']['flags']&0x80)>0?'yes':'no'),
-        'products'=>array('name'=>'Products', 'tag_type'=>'90', 'visible'=>($ciniki['business']['modules']['ciniki.recipes']['flags']&0x0100)>0?'yes':'no'),
-        'contributors'=>array('name'=>'Contributors', 'tag_type'=>'100', 'visible'=>($ciniki['business']['modules']['ciniki.recipes']['flags']&0x0200)>0?'yes':'no'),
+        'meals'=>array('name'=>'Meals & Courses', 'tag_type'=>'10', 'visible'=>($ciniki['tenant']['modules']['ciniki.recipes']['flags']&0x01)>0?'yes':'no'),
+        'ingredients'=>array('name'=>'Main Ingredients', 'tag_type'=>'20', 'visible'=>($ciniki['tenant']['modules']['ciniki.recipes']['flags']&0x02)>0?'yes':'no'),
+        'cuisines'=>array('name'=>'Cuisines', 'tag_type'=>'30', 'visible'=>($ciniki['tenant']['modules']['ciniki.recipes']['flags']&0x04)>0?'yes':'no'),
+        'methods'=>array('name'=>'Methods', 'tag_type'=>'40', 'visible'=>($ciniki['tenant']['modules']['ciniki.recipes']['flags']&0x08)>0?'yes':'no'),
+        'occasions'=>array('name'=>'Occasions', 'tag_type'=>'50', 'visible'=>($ciniki['tenant']['modules']['ciniki.recipes']['flags']&0x10)>0?'yes':'no'),
+        'diets'=>array('name'=>'Diets', 'tag_type'=>'60', 'visible'=>($ciniki['tenant']['modules']['ciniki.recipes']['flags']&0x20)>0?'yes':'no'),
+        'seasons'=>array('name'=>'Seasons', 'tag_type'=>'70', 'visible'=>($ciniki['tenant']['modules']['ciniki.recipes']['flags']&0x40)>0?'yes':'no'),
+        'collections'=>array('name'=>'Collections', 'tag_type'=>'80', 'visible'=>($ciniki['tenant']['modules']['ciniki.recipes']['flags']&0x80)>0?'yes':'no'),
+        'products'=>array('name'=>'Products', 'tag_type'=>'90', 'visible'=>($ciniki['tenant']['modules']['ciniki.recipes']['flags']&0x0100)>0?'yes':'no'),
+        'contributors'=>array('name'=>'Contributors', 'tag_type'=>'100', 'visible'=>($ciniki['tenant']['modules']['ciniki.recipes']['flags']&0x0200)>0?'yes':'no'),
         );
 
     //
@@ -53,7 +53,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
         && preg_match("/^(.*)\.pdf$/", $args['uri_split'][2], $matches)
         ) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'web', 'downloadPDF');
-        $rc = ciniki_recipes_web_downloadPDF($ciniki, $settings, $business_id, $matches[1], array('layout'=>$args['uri_split'][1]));
+        $rc = ciniki_recipes_web_downloadPDF($ciniki, $settings, $tnid, $matches[1], array('layout'=>$args['uri_split'][1]));
         if( $rc['stat'] == 'ok' ) {
             return array('stat'=>'ok', 'download'=>$rc['file']);
         }
@@ -188,7 +188,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
 
     if( $display == 'type' ) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'web', 'tags');
-        $rc = ciniki_recipes_web_tags($ciniki, $settings, $ciniki['request']['business_id'], $tag_type);
+        $rc = ciniki_recipes_web_tags($ciniki, $settings, $ciniki['request']['tnid'], $tag_type);
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
@@ -214,7 +214,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
         // Get the items for the specified category
         //
         ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'web', 'recipes');
-        $rc = ciniki_recipes_web_recipes($ciniki, $settings, $business_id, array('tag_type'=>$tag_type, 'tag_permalink'=>$tag_permalink));
+        $rc = ciniki_recipes_web_recipes($ciniki, $settings, $tnid, array('tag_type'=>$tag_type, 'tag_permalink'=>$tag_permalink));
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
@@ -246,7 +246,7 @@ function ciniki_recipes_web_processRequest(&$ciniki, $settings, $business_id, $a
         //
         ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'web', 'recipeDetails');
         $rc = ciniki_recipes_web_recipeDetails($ciniki, $settings, 
-            $ciniki['request']['business_id'], $recipe_permalink, (isset($tag_permalink)?$tag_permalink:''));
+            $ciniki['request']['tnid'], $recipe_permalink, (isset($tag_permalink)?$tag_permalink:''));
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }

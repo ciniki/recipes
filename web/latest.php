@@ -8,7 +8,7 @@
 // ---------
 // ciniki:
 // settings:        The web settings structure.
-// business_id:     The ID of the business to get events for.
+// tnid:     The ID of the tenant to get events for.
 // type:            The list to return, either by category or year.
 //
 //                  - category
@@ -28,7 +28,7 @@
 //      ...
 // </images>
 //
-function ciniki_recipes_web_latest($ciniki, $settings, $business_id, $limit) {
+function ciniki_recipes_web_latest($ciniki, $settings, $tnid, $limit) {
 
     $strsql = "SELECT ciniki_recipes.id, "
         . "ciniki_recipes.name AS title, "
@@ -44,7 +44,7 @@ function ciniki_recipes_web_latest($ciniki, $settings, $business_id, $limit) {
         . "IF(ciniki_images.last_updated > ciniki_recipes.last_updated, UNIX_TIMESTAMP(ciniki_images.last_updated), UNIX_TIMESTAMP(ciniki_recipes.last_updated)) AS last_updated "
         . "FROM ciniki_recipes "
         . "LEFT JOIN ciniki_images ON (ciniki_recipes.primary_image_id = ciniki_images.id) "
-        . "WHERE ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND (ciniki_recipes.webflags&0x01) = 1 "
         . "ORDER BY ciniki_recipes.date_added DESC ";
 

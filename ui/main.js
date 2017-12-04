@@ -126,7 +126,7 @@ function ciniki_recipes_main() {
 //      this.menu.listby = 'category';
     this.menu.liveSearchCb = function(s, i, v) {
         if( v != '' ) {
-            M.api.getJSONBgCb('ciniki.recipes.recipeSearch', {'business_id':M.curBusinessID, 'start_needle':v, 'limit':'15'},
+            M.api.getJSONBgCb('ciniki.recipes.recipeSearch', {'tnid':M.curTenantID, 'start_needle':v, 'limit':'15'},
                 function(rsp) {
                     M.ciniki_recipes_main.menu.liveSearchShow(s, null, M.gE(M.ciniki_recipes_main.menu.panelUID + '_' + s), rsp.recipes);
                 });
@@ -165,7 +165,7 @@ function ciniki_recipes_main() {
     this.menu.open = function(cb, tag_type, tag_name) {
         if( tag_type != null ) { this.formtab = tag_type; }
         if( tag_name != null ) { this.tag_name = unescape(tag_name); }
-        var args = {'business_id':M.curBusinessID};
+        var args = {'tnid':M.curTenantID};
         if( this.formtab != null ) { args.tag_type = this.formtab; }
         if( this.tag_name != null ) { 
             this.forms[this.formtab].recipes.label = this.tag_name;
@@ -277,7 +277,7 @@ function ciniki_recipes_main() {
     };
     this.recipe.addDropImage = function(iid) {
         var rsp = M.api.getJSON('ciniki.recipes.imageAdd',
-            {'business_id':M.curBusinessID, 'image_id':iid,
+            {'tnid':M.curTenantID, 'image_id':iid,
                 'recipe_id':M.ciniki_recipes_main.recipe.recipe_id});
         if( rsp.stat != 'ok' ) {
             M.api.err(rsp);
@@ -287,7 +287,7 @@ function ciniki_recipes_main() {
     };
     this.recipe.addDropImageRefresh = function() {
         if( M.ciniki_recipes_main.recipe.recipe_id > 0 ) {
-            var rsp = M.api.getJSONCb('ciniki.recipes.recipeGet', {'business_id':M.curBusinessID,
+            var rsp = M.api.getJSONCb('ciniki.recipes.recipeGet', {'tnid':M.curTenantID,
                 'recipe_id':M.ciniki_recipes_main.recipe.recipe_id, 'images':'yes'}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
@@ -304,7 +304,7 @@ function ciniki_recipes_main() {
         if( rid != null ) { this.recipe_id = rid; }
         if( list != null ) { this.list = list; }
 
-        M.api.getJSONCb('ciniki.recipes.recipeGet', {'business_id':M.curBusinessID, 'recipe_id':M.ciniki_recipes_main.recipe.recipe_id, 'images':'yes'}, function(rsp) {
+        M.api.getJSONCb('ciniki.recipes.recipeGet', {'tnid':M.curTenantID, 'recipe_id':M.ciniki_recipes_main.recipe.recipe_id, 'images':'yes'}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -432,7 +432,7 @@ function ciniki_recipes_main() {
     };
 /*      this.recipe.liveSearchCb = function(s, i, value) {
         if( i == 'category' || i == 'cuisine' ) {
-            var rsp = M.api.getJSONBgCb('ciniki.recipes.searchField', {'business_id':M.curBusinessID, 'field':i, 'start_needle':value, 'limit':15},
+            var rsp = M.api.getJSONBgCb('ciniki.recipes.searchField', {'tnid':M.curTenantID, 'field':i, 'start_needle':value, 'limit':15},
                 function(rsp) {
                     M.ciniki_recipes_main.recipe.liveSearchShow(s, i, M.gE(M.ciniki_recipes_main.recipe.panelUID + '_' + i), rsp.results);
                 });
@@ -453,13 +453,13 @@ function ciniki_recipes_main() {
         this.removeLiveSearch(s, fid);
     }; */
     this.recipe.fieldHistoryArgs = function(s, i) {
-        return {'method':'ciniki.recipes.recipeHistory', 'args':{'business_id':M.curBusinessID, 
+        return {'method':'ciniki.recipes.recipeHistory', 'args':{'tnid':M.curTenantID, 
             'recipe_id':this.recipe_id, 'field':i}};
     }
     this.recipe.addDropImage = function(iid) {
         if( this.recipe_id == 0 ) {
             var c = this.serializeForm('yes');
-            M.api.postJSONCb('ciniki.recipes.recipeAdd', {'business_id':M.curBusinessID, 'recipe_id':this.recipe_id, 'image_id':iid}, c, function(rsp) {
+            M.api.postJSONCb('ciniki.recipes.recipeAdd', {'tnid':M.curTenantID, 'recipe_id':this.recipe_id, 'image_id':iid}, c, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -468,7 +468,7 @@ function ciniki_recipes_main() {
                     M.ciniki_recipes_main.recipe.refreshImages();
                 });
         } else {
-            M.api.getJSONCb('ciniki.recipes.imageAdd', {'business_id':M.curBusinessID, 'image_id':iid, 'name':'', 'recipe_id':this.recipe_id, 'webflags':1}, function(rsp) {
+            M.api.getJSONCb('ciniki.recipes.imageAdd', {'tnid':M.curTenantID, 'image_id':iid, 'name':'', 'recipe_id':this.recipe_id, 'webflags':1}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -483,7 +483,7 @@ function ciniki_recipes_main() {
     };
     this.recipe.refreshImages = function() {
         if( M.ciniki_recipes_main.recipe.recipe_id > 0 ) {
-            M.api.getJSONCb('ciniki.recipes.recipeGet', {'business_id':M.curBusinessID, 'recipe_id':this.recipe_id, 'images':'yes'}, function(rsp) {
+            M.api.getJSONCb('ciniki.recipes.recipeGet', {'tnid':M.curTenantID, 'recipe_id':this.recipe_id, 'images':'yes'}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -504,7 +504,7 @@ function ciniki_recipes_main() {
             this.sections._buttons.buttons.delete.visible = 'yes';
         }
         if( list != null ) { this.npList = list; }
-        M.api.getJSONCb('ciniki.recipes.recipeGet', {'business_id':M.curBusinessID, 'recipe_id':this.recipe_id, 'tags':'yes', 'images':'yes'}, function(rsp) {
+        M.api.getJSONCb('ciniki.recipes.recipeGet', {'tnid':M.curTenantID, 'recipe_id':this.recipe_id, 'tags':'yes', 'images':'yes'}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -529,7 +529,7 @@ function ciniki_recipes_main() {
         if( this.recipe_id > 0 ) {
             var c = this.serializeForm('no');
             if( c != '' ) {
-                M.api.postJSONCb('ciniki.recipes.recipeUpdate', {'business_id':M.curBusinessID, 'recipe_id':this.recipe_id}, c, function(rsp) {
+                M.api.postJSONCb('ciniki.recipes.recipeUpdate', {'tnid':M.curTenantID, 'recipe_id':this.recipe_id}, c, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -542,7 +542,7 @@ function ciniki_recipes_main() {
             }
         } else {
             var c = this.serializeForm('yes');
-            M.api.postJSONCb('ciniki.recipes.recipeAdd', {'business_id':M.curBusinessID}, c, function(rsp) {
+            M.api.postJSONCb('ciniki.recipes.recipeAdd', {'tnid':M.curTenantID}, c, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -555,7 +555,7 @@ function ciniki_recipes_main() {
     };
     this.recipe.remove = function() {
         if( confirm('Are you sure you want to delete \'' + this.data.name + '\'?  All information about it will be removed and unrecoverable.') ) {
-            M.api.getJSONCb('ciniki.recipes.recipeDelete', {'business_id':M.curBusinessID, 'recipe_id':this.recipe_id}, function(rsp) {
+            M.api.getJSONCb('ciniki.recipes.recipeDelete', {'tnid':M.curTenantID, 'recipe_id':this.recipe_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -611,7 +611,7 @@ function ciniki_recipes_main() {
         return ''; 
     };
     this.image.fieldHistoryArgs = function(s, i) {
-        return {'method':'ciniki.recipes.imageHistory', 'args':{'business_id':M.curBusinessID, 
+        return {'method':'ciniki.recipes.imageHistory', 'args':{'tnid':M.curTenantID, 
             'recipe_image_id':this.recipe_image_id, 'field':i}};
     };
     this.image.addDropImage = function(iid) {
@@ -622,7 +622,7 @@ function ciniki_recipes_main() {
         if( iid != null ) { this.recipe_image_id = iid; }
         if( eid != null ) { this.recipe_id = eid; }
         if( this.recipe_image_id > 0 ) {
-            M.api.getJSONCb('ciniki.recipes.imageGet', {'business_id':M.curBusinessID, 'recipe_image_id':this.recipe_image_id}, function(rsp) {
+            M.api.getJSONCb('ciniki.recipes.imageGet', {'tnid':M.curTenantID, 'recipe_image_id':this.recipe_image_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -642,7 +642,7 @@ function ciniki_recipes_main() {
         if( this.recipe_image_id > 0 ) {
             var c = this.serializeFormData('no');
             if( c != '' ) {
-                M.api.postJSONFormData('ciniki.recipes.imageUpdate', {'business_id':M.curBusinessID, 'recipe_image_id':this.recipe_image_id}, c, function(rsp) {
+                M.api.postJSONFormData('ciniki.recipes.imageUpdate', {'tnid':M.curTenantID, 'recipe_image_id':this.recipe_image_id}, c, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -655,7 +655,7 @@ function ciniki_recipes_main() {
             }
         } else {
             var c = this.serializeFormData('yes');
-            var rsp = M.api.postJSONFormData('ciniki.recipes.imageAdd', {'business_id':M.curBusinessID, 'recipe_id':this.recipe_id}, c, function(rsp) {
+            var rsp = M.api.postJSONFormData('ciniki.recipes.imageAdd', {'tnid':M.curTenantID, 'recipe_id':this.recipe_id}, c, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -667,7 +667,7 @@ function ciniki_recipes_main() {
     };
     this.image.remove = function() {
         if( confirm('Are you sure you want to delete this image?') ) {
-            M.api.getJSONCb('ciniki.recipes.imageDelete', {'business_id':M.curBusinessID, 'recipe_image_id':this.recipe_image_id}, function(rsp) {
+            M.api.getJSONCb('ciniki.recipes.imageDelete', {'tnid':M.curTenantID, 'recipe_image_id':this.recipe_image_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;

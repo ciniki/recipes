@@ -8,12 +8,12 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:     The ID of the business to get the list from.
+// tnid:     The ID of the tenant to get the list from.
 // 
 // Returns
 // -------
 //
-function ciniki_recipes_web_downloadPDF($ciniki, $settings, $business_id, $permalink, $args) {
+function ciniki_recipes_web_downloadPDF($ciniki, $settings, $tnid, $permalink, $args) {
 
     //
     // Load the recipe
@@ -31,7 +31,7 @@ function ciniki_recipes_web_downloadPDF($ciniki, $settings, $business_id, $perma
         . "ciniki_recipes.instructions "
         . "FROM ciniki_recipes "
         . "WHERE ciniki_recipes.permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
-        . "AND ciniki_recipes.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "AND ciniki_recipes.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
     $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.recipes', array(
@@ -69,7 +69,7 @@ function ciniki_recipes_web_downloadPDF($ciniki, $settings, $business_id, $perma
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'recipes', 'templates', $args['layout']);
     $function = 'ciniki_recipes_templates_' . $args['layout'];
-    $rc = $function($ciniki, $business_id, array(array('name'=>'', 'recipes'=>$recipes)), $args);
+    $rc = $function($ciniki, $tnid, array(array('name'=>'', 'recipes'=>$recipes)), $args);
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }
