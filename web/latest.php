@@ -48,7 +48,7 @@ function ciniki_recipes_web_latest($ciniki, $settings, $tnid, $limit) {
         . "AND (ciniki_recipes.webflags&0x01) = 1 "
         . "ORDER BY ciniki_recipes.date_added DESC ";
 
-    $strsql .= "LIMIT $limit ";
+    $strsql .= "LIMIT " . intval($limit) . " ";
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQuery');
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.recipes', '');
