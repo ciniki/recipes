@@ -554,15 +554,15 @@ function ciniki_recipes_main() {
         }
     };
     this.recipe.remove = function() {
-        if( confirm('Are you sure you want to delete \'' + this.data.name + '\'?  All information about it will be removed and unrecoverable.') ) {
-            M.api.getJSONCb('ciniki.recipes.recipeDelete', {'tnid':M.curTenantID, 'recipe_id':this.recipe_id}, function(rsp) {
+        M.confirm('Are you sure you want to delete \'' + this.data.name + '\'?  All information about it will be removed and unrecoverable.',null,function() {
+            M.api.getJSONCb('ciniki.recipes.recipeDelete', {'tnid':M.curTenantID, 'recipe_id':M.ciniki_recipes_main.recipe.recipe_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_recipes_main.recipe.close();
             });
-        }
+        });
     };
     this.recipe.nextButtonFn = function() {
         if( this.npList != null && this.npList.indexOf('' + this.recipe_id) < (this.npList.length - 1) ) {
@@ -666,15 +666,15 @@ function ciniki_recipes_main() {
         }
     };
     this.image.remove = function() {
-        if( confirm('Are you sure you want to delete this image?') ) {
-            M.api.getJSONCb('ciniki.recipes.imageDelete', {'tnid':M.curTenantID, 'recipe_image_id':this.recipe_image_id}, function(rsp) {
+        M.confirm('Are you sure you want to delete this image?',null,function() {
+            M.api.getJSONCb('ciniki.recipes.imageDelete', {'tnid':M.curTenantID, 'recipe_image_id':M.ciniki_recipes_main.image.recipe_image_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_recipes_main.image.close();
             });
-        }
+        });
     };
     this.image.addButton('save', 'Save', 'M.ciniki_recipes_main.image.save();');
     this.image.addClose('Cancel');
@@ -691,7 +691,7 @@ function ciniki_recipes_main() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_recipes_main', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }
 
