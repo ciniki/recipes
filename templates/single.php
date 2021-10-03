@@ -13,7 +13,7 @@
 function ciniki_recipes_templates_single($ciniki, $tnid, $categories, $args) {
 
     require_once($ciniki['config']['ciniki.core']['lib_dir'] . '/tcpdf/tcpdf.php');
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'images', 'private', 'loadCacheOriginal');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'images', 'private', 'loadCacheJPEG');
     ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'tenantDetails');
 
     //
@@ -114,7 +114,7 @@ function ciniki_recipes_templates_single($ciniki, $tnid, $categories, $args) {
             $ingredients_box_width = ($this->getPageWidth() - $this->left_margin - $this->right_margin - $this->middle_margin);
             $image = NULL;
             if( isset($recipe['image_id']) && $recipe['image_id'] > 0 ) {
-                $rc = ciniki_images_loadCacheOriginal($ciniki, $tnid, $recipe['image_id'], 2000, 2000);
+                $rc = ciniki_images_loadCacheJPEG($ciniki, $tnid, $recipe['image_id'], 2000, 2000);
                 if( $rc['stat'] == 'ok' ) {
                     $image = $rc['image'];
                     $ingredients_box_width = (($this->getPageWidth() - $this->left_margin - $this->right_margin - $this->middle_margin)/2);
@@ -265,7 +265,7 @@ function ciniki_recipes_templates_single($ciniki, $tnid, $categories, $args) {
         if( isset($args['coverpage-image']) && $args['coverpage-image'] > 0 ) {
             $img_box_width = 180;
             $img_box_height = 150;
-            $rc = ciniki_images_loadCacheOriginal($ciniki, $tnid, $args['coverpage-image'], 2000, 2000);
+            $rc = ciniki_images_loadCacheJPEG($ciniki, $tnid, $args['coverpage-image'], 2000, 2000);
             if( $rc['stat'] == 'ok' ) {
                 $image = $rc['image'];
                 $pdf->SetLineWidth(0.25);
