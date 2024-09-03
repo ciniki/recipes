@@ -42,7 +42,7 @@ function ciniki_recipes_recipeSearch($ciniki) {
             . "OR name LIKE '% " . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
             . ") "
         . "";
-    $strsql .= "ORDER BY name COLLATE latin1_general_cs "
+    $strsql .= "ORDER BY name "
         . "";
     if( isset($args['limit']) && $args['limit'] != '' && $args['limit'] > 0 ) {
         $strsql .= "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " ";
